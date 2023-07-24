@@ -1,10 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+} from "@mui/material";
 
 export default function Home() {
 
   useEffect(() => {
-    //fetchNews();
+    buildNewsCards()
   }, []);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
@@ -11372,14 +11379,15 @@ export default function Home() {
     "newStoriesCountLink": "https://www.tagesschau.de/api2u/newStoriesCount?state=H4sIAAAAAAAAAAFoAJf%2FUbpdRsH1qZJtlpuB6H5j33f%2BM2JYu9ro1VRjMnuPpeah%2FLAM452IqxREbBT7jSxeiU5L6QOUk%2F5tofWag%2FOXnnllw%2F98t7buzlOJlrYgBKz9Hlo1uaKQkStxx0zp8Kf%2BZwyPSWef4MKQwyHDaAAAAA%3D%3D",
     "type": "news"
   });
+  const [newsCards, setNewsCards] = useState([])
+  const [index, setIndex] = useState(0)
 
-  function fetchNews () {
+  async function fetchNews () {
     fetch(tagesschauAPI, { method: "GET" })
     .then((res) => res.json())
     .then(
       (result) => {
         setNews(result)
-        console.log(result)
       },
       (error) => {
         console.log(error);
@@ -11387,12 +11395,54 @@ export default function Home() {
     );
 };
 
+async function buildNewsCards() {
+  //await fetchNews()
+  setNewsCards(
+    news.news.map((report) => {
+      if(report.content){
+        return (
+          <Card>
+            <CardMedia
+              component="img"
+              image={report.teaserImage.imageVariants["1x1-840"]}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {report.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {Object.values(report.content)[0].value}
+              </Typography>
+            </CardContent>
+          </Card>
+        )
+      }
+    })
+  )
+}
 
-    return (
-        <div>
-            {news.news.map((report) => 
-                <img src={report.teaserImage.imageVariants["16x9-1920"]}/>
-            )}
-        </div>
-    )
+function iterateArray(){
+  const newIndex = index + 1
+  setIndex(newIndex)
+  if (newIndex >= newsCards.length) {
+    setIndex(0);
+  }
+}
+
+setInterval(iterateArray, 15000); // 15000 milliseconds = 15 seconds
+
+
+  return (
+      <Box
+        width="100vw"
+        height="100vh"
+      >
+        <Box
+          width="50vw"
+          height="50vh"
+        >
+        {newsCards[index]}
+        </Box>
+      </Box>
+  )
 }

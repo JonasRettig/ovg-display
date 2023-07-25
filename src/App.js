@@ -11445,7 +11445,7 @@ function rssFetcher() {
     if (request.readyState === 4 && request.status === 200) {
       var myObj = request.responseText;
       parseString(myObj, function (err, result) {
-        setDates(JSON.stringify(result))
+        setDates(result)
     });
     }
   }
@@ -11453,11 +11453,16 @@ function rssFetcher() {
   request.send();
 }
 
-useEffect(() => {
-  if(dates) {
-  console.log(Object.values(dates)[1])
-  }
-}, [dates]);
+function createRows() {
+  var rows = []
+  var id = 0
+  dates.rss.channel[0].item.map((row) => {
+    row["id"] = id
+    id++
+  })
+  rows = dates.rss.channel[0].item
+  return rows
+}
 
   return (
       <Box
@@ -11469,11 +11474,11 @@ useEffect(() => {
         >
         {newsCards[index]}
         <Box>
-        {dates &&
+        {(dates !== null && dates !== undefined) &&
         <>
           <Typography> Termine </Typography>
           <DataGrid
-            rows={Object.values(dates)[1].item}
+            rows={createRows()}
             columns={[{ field: 'title', headerName: "Titel", width: 150 }, { field: 'pubDate', headerName: 'Datum', width: 150 }]}
           />
         </>

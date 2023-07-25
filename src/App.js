@@ -19,7 +19,7 @@ export default function Home() {
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
-  const proxyUrl = '127.0.0.1:8080';
+  const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
 
   const [news, setNews] = useState({

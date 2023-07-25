@@ -11388,6 +11388,8 @@ export default function Home() {
   const [newsCards, setNewsCards] = useState([])
   const [index, setIndex] = useState(0)
   const [dates, setDates] = useState(null)
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
   async function fetchNews () {
     fetch(tagesschauAPI, { method: "GET" })
@@ -11411,7 +11413,7 @@ async function buildNewsCards() {
           <Card>
             <CardMedia
               component="img"
-              image={report.teaserImage.imageVariants["1x1-840"]}
+              image={report.teaserImage.imageVariants["1x1-640"]}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -11464,27 +11466,42 @@ function createRows() {
   return rows
 }
 
-  return (
-      <Box
-        width="100vw"
-        height="100vh"
+return (
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    alignContent="center"
+  >
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      sx={{ height: "80%", width : "80%"}}
+    >
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
       >
-        <Stack
-          direction="row"
-        >
         {newsCards[index]}
-        <Box>
-        {(dates !== null && dates !== undefined) &&
-        <>
-          <Typography> Termine </Typography>
-          <DataGrid
-            rows={createRows()}
-            columns={[{ field: 'title', headerName: "Titel", width: 150 }, { field: 'pubDate', headerName: 'Datum', width: 150 }]}
-          />
-        </>
-        }
-        </Box>
+        <Stack
+          direction="column"
+          spacing={2}
+        >
+          {(dates !== null && dates !== undefined) &&
+          <>
+            <Typography> Termine </Typography>
+            <DataGrid
+              rows={createRows()}
+              columns={[{ field: 'title', headerName: "Titel", width: 300 }, { field: 'pubDate', headerName: 'Datum', width: 300 }]}
+            />
+          </>
+          }
         </Stack>
-      </Box>
-  )
+      </Stack>
+    </Box>
+  </Box>
+)
 }

@@ -6,15 +6,21 @@ import {
   CardMedia,
   Typography,
   Box,
+  Stack
 } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
 
 export default function Home() {
 
   useEffect(() => {
     buildNewsCards()
+    rssFetcher()
   }, []);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
+  const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
+  const proxyUrl = '127.0.0.1:8080';
+
 
   const [news, setNews] = useState({
     "news": [
@@ -11381,6 +11387,7 @@ export default function Home() {
   });
   const [newsCards, setNewsCards] = useState([])
   const [index, setIndex] = useState(0)
+  const [dates, setDates] = useState(null)
 
   async function fetchNews () {
     fetch(tagesschauAPI, { method: "GET" })
@@ -11431,18 +11438,48 @@ function iterateArray(){
 
 setInterval(iterateArray, 15000); // 15000 milliseconds = 15 seconds
 
+function rssFetcher() {
+  var request = new XMLHttpRequest();
+  var parseString = require('xml2js').parseString;
+  request.onreadystatechange = () => {
+    if (request.readyState === 4 && request.status === 200) {
+      var myObj = request.responseText;
+      parseString(myObj, function (err, result) {
+        setDates(JSON.stringify(result))
+    });
+    }
+  }
+  request.open("GET", proxyUrl + rssURL, true);
+  request.send();
+}
+
+useEffect(() => {
+  if(dates) {
+  console.log(Object.values(dates)[1])
+  }
+}, [dates]);
 
   return (
       <Box
         width="100vw"
         height="100vh"
       >
-        <Box
-          width="50vw"
-          height="50vh"
+        <Stack
+          direction="row"
         >
         {newsCards[index]}
+        <Box>
+        {dates &&
+        <>
+          <Typography> Termine </Typography>
+          <DataGrid
+            rows={Object.values(dates)[1].item}
+            columns={[{ field: 'title', headerName: "Titel", width: 150 }, { field: 'pubDate', headerName: 'Datum', width: 150 }]}
+          />
+        </>
+        }
         </Box>
+        </Stack>
       </Box>
   )
 }

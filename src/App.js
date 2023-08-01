@@ -15,10 +15,13 @@ export default function Home() {
   useEffect(() => {
     buildNewsCards()
     rssFetcher()
+    iterateArray();
   }, []);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
+  //! OpenWeatherMap API Key hier, entferen und ändern vor Veröffentlichung
+  const weatherURL = "https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&appid=a286d415c1da274ee1d4f134b1db4117"
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
 
@@ -11386,6 +11389,7 @@ export default function Home() {
     "type": "news"
   });
   const [newsCards, setNewsCards] = useState([])
+  const [weather, setWeather] = useState(null)
   const [index, setIndex] = useState(0)
   const [dates, setDates] = useState(null)
   const [page, setPage] = useState(0);
@@ -11403,6 +11407,19 @@ export default function Home() {
       }
     );
 };
+
+async function fetchWeather() {
+  fetch(weatherURL, { method: "GET" })
+    .then((res) => res.json())
+    .then(  
+      (result) => {
+        setWeather(result)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+}
 
 async function buildNewsCards() {
   //await fetchNews()
@@ -11430,15 +11447,20 @@ async function buildNewsCards() {
   )
 }
 
-function iterateArray(){
+async function iterateArray(){
   const newIndex = index + 1
-  setIndex(newIndex)
   if (newIndex >= newsCards.length) {
     setIndex(0);
+    console.log("reset")
+    console.log(newsCards)
   }
+  else {
+    setIndex(newIndex);
+    console.log("next")
+  }
+  await new Promise((r) => setTimeout(r, 1000));
+  iterateArray()
 }
-
-setInterval(iterateArray, 15000); // 15000 milliseconds = 15 seconds
 
 function rssFetcher() {
   var request = new XMLHttpRequest();

@@ -13059,6 +13059,12 @@ return (
       sx={{ height: "80%", width : "80%"}}
     >
       <Stack
+        direction="column"
+        spacing={2}
+        justifyContent={"center"}
+        alignItems="center"
+      >
+      <Stack
         direction="row"
         spacing={2}
         justifyContent="center"
@@ -13079,7 +13085,8 @@ return (
           </>
           }
         </Stack>
-        <Weather currentWeather={currentWeather} forecast={forecast}/>
+      </Stack>
+      <Weather currentWeather={currentWeather} forecast={forecast}/>
       </Stack>
     </Box>
   </Box>

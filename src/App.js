@@ -24,7 +24,7 @@ export default function Home() {
   const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
   //! OpenWeatherMap API Key hier, entferen und ändern vor Veröffentlichung
   const currentWeatherURL = "https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=a286d415c1da274ee1d4f134b1db4117"
-  const forecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&appid=a286d415c1da274ee1d4f134b1db4117"
+  const forecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=a286d415c1da274ee1d4f134b1db4117"
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
 
@@ -13000,7 +13000,7 @@ async function buildNewsCards() {
                 {report.title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {Object.values(report.content)[0].value}
+                {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
               </Typography>
             </CardContent>
           </Card>

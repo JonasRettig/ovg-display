@@ -1,13 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import {
-    Card,
-    CardContent,
-    CardMedia,
     Typography,
-    Box,
     Stack,
-    Image
+    Divider
   } from "@mui/material";
 
 export default function Weather({currentWeather, forecast}) {
@@ -43,8 +39,9 @@ export default function Weather({currentWeather, forecast}) {
     }
 
     return (
-        <Stack direction={"column"}>
-            <Typography> Wetter </Typography>
+        <>
+        <Typography> Wetter </Typography>
+        <Stack direction={"row"}>
             <Stack direction={"column"}>
                 <Typography> Aktuelles Wetter </Typography>
                 <Stack direction={"row"}>
@@ -54,13 +51,18 @@ export default function Weather({currentWeather, forecast}) {
                 </Stack>    
             </Stack>
             <Stack direction={"column"}>
-                <Typography> Vorschau </Typography>
                 <Stack direction={"row"}>
                 {forecastRender.map((item) => {
-                    return item;
+                    return (
+                        <React.Fragment key={item.id}>
+                            <Divider />
+                            {item}
+                        </React.Fragment>
+                    );
                 })}
                 </Stack>
             </Stack>
         </Stack>
+        </>
     )
 }

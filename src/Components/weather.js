@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
     Typography,
     Stack,
-    Divider
   } from "@mui/material";
 
 export default function Weather({currentWeather, forecast}) {
@@ -24,13 +23,11 @@ export default function Weather({currentWeather, forecast}) {
         Object.values(forecast.list).map((item) => {
             if (forecastTimes.includes(item.dt)) {
                 forecastBuilder.push(
-                <Stack direction={"column"}>
+                <Stack direction={"column"} key={item.dt}>
                     <Typography> {item.dt_txt} </Typography>
-                    <Stack direction={"row"}>
                         <Typography> {item.weather[0].description} </Typography>
-                        <img id="weatherIcon" src={buildIconURL(item.weather[0].icon)} alt="Weather icon"/>  
+                        <img id="weatherIcon" src={buildIconURL(item.weather[0].icon)} alt="Weather icon"  width="50" height="50"/>  
                         <Typography> {item.main.temp}°C </Typography>
-                    </Stack>    
                 </Stack>
                 )
             }
@@ -44,21 +41,14 @@ export default function Weather({currentWeather, forecast}) {
         <Stack direction={"row"}>
             <Stack direction={"column"}>
                 <Typography> Aktuelles Wetter </Typography>
-                <Stack direction={"row"}>
-                    <Typography> {currentWeather.weather[0].description} </Typography>
-                    <img id="weatherIcon" src={buildIconURL(currentWeather.weather[0].icon)} alt="Weather icon"/>  
-                    <Typography> {currentWeather.main.temp}°C </Typography>
-                </Stack>    
+                <Typography> {currentWeather.weather[0].description} </Typography>
+                <img id="weatherIcon" src={buildIconURL(currentWeather.weather[0].icon)} alt="Weather icon" width="50" height="50"/>  
+                <Typography> {currentWeather.main.temp}°C </Typography>
             </Stack>
             <Stack direction={"column"}>
                 <Stack direction={"row"}>
                 {forecastRender.map((item) => {
-                    return (
-                        <React.Fragment key={item.id}>
-                            <Divider />
-                            {item}
-                        </React.Fragment>
-                    );
+                    return item;
                 })}
                 </Stack>
             </Stack>

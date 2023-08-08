@@ -11,6 +11,11 @@ import {
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 
+<html>
+<p>print env secret to HTML</p>
+<pre>{process.env.REACT_APP_SECRET_NAME}</pre>
+</html>
+
 export default function Home() {
 
   // Reload the page every 30 minutes
@@ -20,9 +25,8 @@ export default function Home() {
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
-  //! OpenWeatherMap API Key hier, entferen und ändern vor Veröffentlichung
-  const currentWeatherURL = "https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=a286d415c1da274ee1d4f134b1db4117"
-  const forecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=a286d415c1da274ee1d4f134b1db4117"
+  const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
   const [news, setNews] = useState({})

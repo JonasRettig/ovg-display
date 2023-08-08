@@ -42,7 +42,7 @@ export default function Weather({currentWeather, forecast}) {
         <>
         <Typography> Wetter </Typography>
         {currentWeather.weather ?
-        <Stack direction={"row"}>
+        <Stack direction={"row"} spacing={2}>
             <Card key={currentWeather.dt}>
                 <Typography> Aktuelles Wetter </Typography>
                 <Typography> {currentWeather.weather[0].description} </Typography>

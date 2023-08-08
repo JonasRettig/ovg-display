@@ -195,6 +195,7 @@ return (
         justifyContent="center"
         alignItems="center"
       >
+        {/*
         <Stack
           direction={"column"}
           spacing={2}
@@ -202,6 +203,7 @@ return (
           <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=1&width=1000&height=500&tz=Europe%2FBerlin"/>
           <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=2&width=1000&height=500&tz=Europe%2FBerlin"/>
         </Stack>
+        */}
         <Stack 
           direction={"column"}
           spacing={2}

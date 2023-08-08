@@ -25,14 +25,13 @@ export default function Home() {
   const forecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=a286d415c1da274ee1d4f134b1db4117"
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
-  const [news, setNews] = useState([])
+  const [news, setNews] = useState({})
   const [newsCards, setNewsCards] = useState([])
+  const [breakingNews, setBreakingNews] = useState([])
   const [currentWeather, setCurrentWeather] = useState({})
   const [forecast, setForecast] = useState({})
   const [index, setIndex] = useState(0)
   const [dates, setDates] = useState(null)
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
     buildNewsCards()
@@ -45,6 +44,14 @@ export default function Home() {
   useEffect(() => {
     buildNewsCards()
   }, [news]);
+
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setIndex((index) => (index + 1) % newsCards.length);
+    }, 15000);
+    return () => clearInterval(intervalId);
+  }, [newsCards.length]);
 
   async function fetchNews () {
     fetch(tagesschauAPI, { method: "GET" })
@@ -86,58 +93,52 @@ async function fetchForecast() {
 }
 
 async function buildNewsCards() {
+  var newsCardsToAdd = []
   if(news.news) {
-    setNewsCards(
       news.news.map((report) => {
         if(report.content){
-          return (
-            <Card>
-              <CardMedia
-                component="img"
-                image={report.teaserImage.imageVariants["1x1-640"]}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {report.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
-                </Typography>
-              </CardContent>
-            </Card>
-          )
+          if (!report.breakingNews) { 
+          newsCardsToAdd.push({
+            image: report.teaserImage.imageVariants["1x1-640"],
+            title: report.title,
+            text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
+          }
+          )} else {
+            handleBreakingNews(report)
+          }
         }
       })
-    )
+    setNewsCards(newsCardsToAdd)
   }
   else {
-    setNewsCards([
-      <Card>
-        <CardMedia
-          component="img"
-          image={"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Laden der Nachrichten fehlgeschlagen
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Sollte das Problem bestehen bleiben wenden Sie sich bitte an den Administrator.
-          </Typography>
-        </CardContent>
-      </Card>
-    ])
+    setNewsCards([{
+          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
+          title: "Laden der Nachrichten fehlgeschlagen",
+          text: "Sollte das Problem bestehen bleiben wenden Sie sich bitte an den Administrator."
+    }])
   }
 }
 
-const intervalId = setInterval(() => {
-  var newIndex = index + 1;
-  setIndex(newIndex);
-  if (newIndex >= newsCards.length) {
-    clearInterval(intervalId);
-    setIndex(0);
-  }
-}, 15000);
+function handleBreakingNews(report) {
+  setBreakingNews(
+    <Card style={{ backgroundColor: 'red' }}>
+      <CardContent>
+        {report.teaserImage &&
+        <CardMedia
+          component="img"
+          image={report.teaserImage.imageVariants["1x1-640"]}
+        />
+        }
+        <Typography gutterBottom variant="h5" component="div">
+          EIL +++ {report.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
+        </Typography>
+      </CardContent>
+    </Card>
+  )
+}
 
 function rssFetcher() {
   var request = new XMLHttpRequest();
@@ -190,7 +191,28 @@ return (
         justifyContent="center"
         alignItems="center"
       >
-        {newsCards[index]}
+        <Stack 
+          direction={"column"}
+          spacing={2}
+        >
+          {breakingNews}
+          {newsCards[index] &&
+          <Card>
+              <CardMedia
+                component="img"
+                image={newsCards[index].image}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {newsCards[index].title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {newsCards[index].text}
+                </Typography>
+              </CardContent>
+            </Card>
+          }
+        </Stack>
         <Stack
           direction="column"
           spacing={2}

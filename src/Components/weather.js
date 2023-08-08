@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import {
     Typography,
     Stack,
+    Card
   } from "@mui/material";
 
 export default function Weather({currentWeather, forecast}) {
@@ -24,12 +25,12 @@ export default function Weather({currentWeather, forecast}) {
             Object.values(forecast.list).map((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Stack direction={"column"} key={item.dt}>
+                    <Card key={item.dt}>
                         <Typography> {item.dt_txt} </Typography>
                             <Typography> {item.weather[0].description} </Typography>
                             <img id="weatherIcon" src={buildIconURL(item.weather[0].icon)} alt="Weather icon"  width="50" height="50"/>  
                             <Typography> {item.main.temp}°C </Typography>
-                    </Stack>
+                    </Card>
                     )
                 }
             setForecastRender(forecastBuilder);    
@@ -42,19 +43,15 @@ export default function Weather({currentWeather, forecast}) {
         <Typography> Wetter </Typography>
         {currentWeather.weather ?
         <Stack direction={"row"}>
-            <Stack direction={"column"}>
+            <Card key={currentWeather.dt}>
                 <Typography> Aktuelles Wetter </Typography>
                 <Typography> {currentWeather.weather[0].description} </Typography>
                 <img id="weatherIcon" src={buildIconURL(currentWeather.weather[0].icon)} alt="Weather icon" width="50" height="50"/>  
                 <Typography> {currentWeather.main.temp}°C </Typography>
-            </Stack>
-            <Stack direction={"column"}>
-                <Stack direction={"row"}>
-                {forecastRender.map((item) => {
-                    return item;
-                })}
-                </Stack>
-            </Stack>
+            </Card>
+            {forecastRender.map((item) => {
+                return item;
+            })}
         </Stack>
         :
         <Typography> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>

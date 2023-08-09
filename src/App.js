@@ -35,7 +35,82 @@ export default function Home() {
   const [currentWeather, setCurrentWeather] = useState({})
   const [forecast, setForecast] = useState({})
   const [index, setIndex] = useState(0)
-  const [dates, setDates] = useState(null)
+  const [dates, setDates] = useState([])
+  /*const [dates, setDates] = useState(<?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title><![CDATA[Oberverwaltungsgericht NRW in Münster - Sitzungstermine]]></title>
+      <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+      <description><![CDATA[]]></description>
+      <pubDate>Wed, 09 Aug 2023 00:00:00 +0200</pubDate>
+      <lastBuildDate>Wed, 09 Aug 2023 07:50:23 +0200</lastBuildDate>
+      <atom:link href="https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php" rel="self" type="application/rss+xml" />
+      <item>
+        <title><![CDATA[Heute, 10:00 Uhr: 21 D 53/19.AK - Termin aufgehoben!]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st0</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 10:00 Uhr: 21 D 54/19.AK - Termin aufgehoben!]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st1</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 10:00 Uhr: 34 A 2104/22.PVL]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Verfahren nach § 75 LPVG]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st2</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 10:45 Uhr: 34 A 2105/22.PVL]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Verfahren nach § 75 LPVG]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 10:45:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st3</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 12:00 Uhr: 21 D 46/19.AK - Termin aufgehoben!]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 12:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st4</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 13:00 Uhr: 21 D 53/19.AK]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 13:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st5</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 13:00 Uhr: 21 D 54/19.AK]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 13:00:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st6</guid>
+      </item>
+      <item>
+        <title><![CDATA[Heute, 14:30 Uhr: 21 D 46/19.AK - Termin aufgehoben!]]></title>
+        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
+  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
+        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
+        <pubDate>Wed, 09 Aug 2023 14:30:00 +0200</pubDate>
+        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st7</guid>
+      </item>
+    </channel>
+  </rss>)*/
 
   useEffect(() => {
     buildNewsCards()

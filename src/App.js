@@ -171,11 +171,14 @@ function createRows() {
   var finalRows = []
   rows.map((row) => { 
     var newRow = {}
-    const parts = row.title[0].split(":");
+    const titleParts = row.title[0].split(":");
+    const descriptionParts = row.description[0].split("<br />");
     newRow.id = row.id
-    newRow.title = parts[0] + ":" + parts[1];
-    newRow.case = parts[2]; 
-    newRow.description = row.description[0].replace(/<br \/>/g, '\n').replace(/<[^>]*>?/gm, ''); 
+    newRow.title = titleParts[0] + ":" + titleParts[1];
+    newRow.case = titleParts[2]; 
+    newRow.type = descriptionParts[0].replace("Termin:", "").trim(); // remove "Termin:" and trim whitespace
+    newRow.procedure = descriptionParts[1].replace("Verfahren:", "").trim(); // remove "Verfahren:" and trim whitespace
+    newRow.info = descriptionParts[2];
     finalRows.push(newRow)   
   })
   return finalRows
@@ -247,7 +250,7 @@ return (
             {dates.rss ?
             <DataGrid
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", flex: 0.5 }, { field: 'case', headerName: 'Aktenzeichen', flex: 0.5 }, { field: 'description', headerName: 'Beschreibung', flex: 1.5 }]}
+              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150" }]}
             /> :
             <Typography> Heute finden keine Termine statt. </Typography>
             }

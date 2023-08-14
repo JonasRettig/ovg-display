@@ -24,7 +24,7 @@ export default function Home() {
   }, 30 * 60 * 1000);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
-  const rssURL = "https://www.justiz.nrw.de/WebPortal_Relaunch/Service/rss/termine/index.php"
+  const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
   const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
   const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
@@ -35,82 +35,7 @@ export default function Home() {
   const [currentWeather, setCurrentWeather] = useState({})
   const [forecast, setForecast] = useState({})
   const [index, setIndex] = useState(0)
-  const [dates, setDates] = useState([])
-  /*const [dates, setDates] = useState(<?xml version="1.0" encoding="UTF-8"?>
-  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-      <title><![CDATA[Oberverwaltungsgericht NRW in Münster - Sitzungstermine]]></title>
-      <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-      <description><![CDATA[]]></description>
-      <pubDate>Wed, 09 Aug 2023 00:00:00 +0200</pubDate>
-      <lastBuildDate>Wed, 09 Aug 2023 07:50:23 +0200</lastBuildDate>
-      <atom:link href="https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php" rel="self" type="application/rss+xml" />
-      <item>
-        <title><![CDATA[Heute, 10:00 Uhr: 21 D 53/19.AK - Termin aufgehoben!]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st0</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 10:00 Uhr: 21 D 54/19.AK - Termin aufgehoben!]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st1</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 10:00 Uhr: 34 A 2104/22.PVL]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Verfahren nach § 75 LPVG]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 10:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st2</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 10:45 Uhr: 34 A 2105/22.PVL]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Verfahren nach § 75 LPVG]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 10:45:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st3</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 12:00 Uhr: 21 D 46/19.AK - Termin aufgehoben!]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 12:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st4</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 13:00 Uhr: 21 D 53/19.AK]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 13:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st5</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 13:00 Uhr: 21 D 54/19.AK]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 13:00:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st6</guid>
-      </item>
-      <item>
-        <title><![CDATA[Heute, 14:30 Uhr: 21 D 46/19.AK - Termin aufgehoben!]]></title>
-        <description>Termin: <![CDATA[Mündliche Verhandlung<br />
-  Verfahren: Klageverfahren nach § 48 VwGO<br /><br />- Termin aufgehoben! -]]></description>
-        <link>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php</link>
-        <pubDate>Wed, 09 Aug 2023 14:30:00 +0200</pubDate>
-        <guid>https://www.ovg.nrw.de/behoerde/sitzungstermine/index.php#st7</guid>
-      </item>
-    </channel>
-  </rss>)*/
+  const [dates, setDates] = useState({})
 
   useEffect(() => {
     buildNewsCards()
@@ -226,6 +151,7 @@ function rssFetcher() {
     if (request.readyState === 4 && request.status === 200) {
       var myObj = request.responseText;
       parseString(myObj, function (err, result) {
+        console.log(result, myObj);
         setDates(result)
     });
     }
@@ -242,7 +168,17 @@ function createRows() {
     id++
   })
   rows = dates.rss.channel[0].item
-  return rows
+  var finalRows = []
+  rows.map((row) => { 
+    var newRow = {}
+    const parts = row.title[0].split(":");
+    newRow.id = row.id
+    newRow.title = parts[0] + ":" + parts[1];
+    newRow.case = parts[2]; 
+    newRow.description = row.description[0].replace(/<br \/>/g, '\n').replace(/<[^>]*>?/gm, ''); 
+    finalRows.push(newRow)   
+  })
+  return finalRows
 }
 
 return (
@@ -308,10 +244,13 @@ return (
           {(dates !== null && dates !== undefined) &&
           <>
             <Typography> Termine </Typography>
+            {dates.rss ?
             <DataGrid
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Titel", width: 300 }, { field: 'pubDate', headerName: 'Datum', width: 300 }]}
-            />
+              columns={[{ field: 'title', headerName: "Zeit", flex: 0.5 }, { field: 'case', headerName: 'Aktenzeichen', flex: 0.5 }, { field: 'description', headerName: 'Beschreibung', flex: 1.5 }]}
+            /> :
+            <Typography> Heute finden keine Termine statt. </Typography>
+            }
           </>
           }
         </Stack>

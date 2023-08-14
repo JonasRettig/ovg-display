@@ -246,8 +246,11 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-            <Typography> Termine </Typography>
-            {dates.rss ?
+          <Typography> Termine </Typography>
+          {dates.rss &&
+            <Typography> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
+          }
+            {(dates.rss && dates.rss.channel[0].item) ?
             <DataGrid
               rows={createRows()}
               columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150" }]}

@@ -7,42 +7,39 @@ import {
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import { WeatherFogIcon, WeatherRainIcon, WeatherDayPartialyCloudyIcon, WeatherNightPartialyCloudyIcon, WeatherClearNightIcon  } from "../styles";
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import WbCloudyIcon from '@mui/icons-material/WbCloudy';
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
+import WbCloudyOutlinedIcon from '@mui/icons-material/WbCloudyOutlined';
+import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined';
+import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined';
 
 export default function Weather({currentWeather, forecast, theme}) {
 
     const [forecastRender, setForecastRender] = useState([]);
 
-    const weatherIcoToMUI = [
-        ["01d", <WbSunnyIcon/>]
-        ["02d", <WeatherDayPartialyCloudyIcon/>]
-        ["03d", <WbCloudyIcon/>]
-        ["04d", <WbCloudyIcon/>]
-        ["09d", <WeatherRainIcon/>]
-        ["10d", <WeatherRainIcon/>]
-        ["11d", <ThunderstormIcon/>]
-        ["13d", <AcUnitIcon/>]
-        ["50d", <WeatherFogIcon/>]
-        ["01n", <WeatherClearNightIcon/>]
-        ["02n", <WeatherNightPartialyCloudyIcon/>]
-        ["03n", <WbCloudyIcon/>]
-        ["04n", <WbCloudyIcon/>]
-        ["09n", <WeatherRainIcon/>]
-        ["10n", <WeatherRainIcon/>]
-        ["11n", <ThunderstormIcon/>]
-        ["13n", <AcUnitIcon/>]
-        ["50n", <WeatherFogIcon/>]
-    ]
-
     useEffect(() => {
         buildForecast()
     }, [forecast])
 
-    function buildIconURL(iconID) {
-        return "http://openweathermap.org/img/w/" + iconID + ".png";
+    function returnIcon(iconID) {
+        if(iconID === "01d") {
+            return <WbSunnyOutlinedIcon/>
+        } else if(iconID === "02d") {
+            return <WeatherDayPartialyCloudyIcon/>
+        } else if(iconID === "03d" || iconID === "03n" || iconID === "04d" || iconID === "04n") {
+            return <WbCloudyOutlinedIcon/>
+        } else if(iconID === "09d" || iconID === "09n" || iconID === "10d" || iconID === "10n") {
+            return <WeatherRainIcon/>
+        } else if(iconID === "11d" || iconID === "11n") {
+            return <ThunderstormOutlinedIcon/>
+        } else if(iconID === "13d" || iconID === "13n") {
+            return <AcUnitOutlinedIcon/>
+        } else if(iconID === "50d" || iconID === "50n") {
+            return <WeatherFogIcon/>
+        } else if(iconID === "01n") {
+            return <WeatherClearNightIcon/>
+        } else if(iconID === "02n") {
+            return <WeatherNightPartialyCloudyIcon/>
+        }
     }
 
     function buildForecast() {
@@ -55,7 +52,7 @@ export default function Weather({currentWeather, forecast, theme}) {
                     <Card key={item.dt}>
                         <Typography> {item.dt_txt} </Typography>
                             <Typography> {item.weather[0].description} </Typography>
-                            <img id="weatherIcon" src={buildIconURL(item.weather[0].icon)} alt="Weather icon"  width="50" height="50"/>  
+                            {returnIcon(item.weather[0].icon)}  
                             <Typography> {item.main.temp}°C </Typography>
                     </Card>
                     )
@@ -73,7 +70,7 @@ export default function Weather({currentWeather, forecast, theme}) {
             <Card key={currentWeather.dt}>
                 <Typography> Aktuelles Wetter </Typography>
                 <Typography> {currentWeather.weather[0].description} </Typography>
-                <img id="weatherIcon" src={buildIconURL(currentWeather.weather[0].icon)} alt="Weather icon" width="50" height="50"/>  
+                {returnIcon(currentWeather.weather[0].icon)}  
                 <Typography> {currentWeather.main.temp}°C </Typography>
             </Card>
             {forecastRender.map((item) => {

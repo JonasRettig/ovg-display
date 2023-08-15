@@ -8,6 +8,9 @@ import {
   Box,
   Stack
 } from "@mui/material";
+import { ThemeProvider } from '@mui/material/styles';
+import { darkTheme } from './styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 
@@ -185,6 +188,8 @@ function createRows() {
 }
 
 return (
+  <ThemeProvider theme={darkTheme}>
+  <CssBaseline />
   <Box
     display="flex"
     justifyContent="center"
@@ -265,5 +270,6 @@ return (
       </Stack>
     </Box>
   </Box>
+  </ThemeProvider>
 )
 }

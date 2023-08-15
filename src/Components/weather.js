@@ -5,6 +5,8 @@ import {
     Stack,
     Card
   } from "@mui/material";
+import { ThemeProvider } from '@mui/material/styles';
+import { darkTheme } from '../styles';
 
 export default function Weather({currentWeather, forecast}) {
 
@@ -39,7 +41,7 @@ export default function Weather({currentWeather, forecast}) {
     }
 
     return (
-        <>
+        <ThemeProvider theme={darkTheme}>
         <Typography> Wetter </Typography>
         {currentWeather.weather ?
         <Stack direction={"row"} spacing={2}>
@@ -56,6 +58,6 @@ export default function Weather({currentWeather, forecast}) {
         :
         <Typography> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
         }
-        </>
+        </ThemeProvider>
     )
 }

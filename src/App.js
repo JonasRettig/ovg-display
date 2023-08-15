@@ -106,7 +106,7 @@ async function buildNewsCards() {
         if(report.content){
           if (!report.breakingNews) { 
           newsCardsToAdd.push({
-            image: report.teaserImage.imageVariants["1x1-640"],
+            image: report.teaserImage.imageVariants["16x9-1920"],
             title: report.title,
             text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
           }
@@ -133,7 +133,7 @@ function handleBreakingNews(report) {
         {report.teaserImage &&
         <CardMedia
           component="img"
-          image={report.teaserImage.imageVariants["1x1-640"]}
+          image={report.teaserImage.imageVariants["16x9-1920"]}
         />
         }
         <Typography gutterBottom variant="h5" component="div">
@@ -154,7 +154,6 @@ function rssFetcher() {
     if (request.readyState === 4 && request.status === 200) {
       var myObj = request.responseText;
       parseString(myObj, function (err, result) {
-        console.log(result, myObj);
         setDates(result)
     });
     }

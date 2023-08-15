@@ -6,10 +6,36 @@ import {
     Card
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
+import { WeatherFogIcon, WeatherRainIcon, WeatherDayPartialyCloudyIcon, WeatherNightPartialyCloudyIcon, WeatherClearNightIcon  } from "../styles";
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import WbCloudyIcon from '@mui/icons-material/WbCloudy';
+import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 export default function Weather({currentWeather, forecast, theme}) {
 
     const [forecastRender, setForecastRender] = useState([]);
+
+    const weatherIcoToMUI = [
+        ["01d", <WbSunnyIcon/>]
+        ["02d", <WeatherDayPartialyCloudyIcon/>]
+        ["03d", <WbCloudyIcon/>]
+        ["04d", <WbCloudyIcon/>]
+        ["09d", <WeatherRainIcon/>]
+        ["10d", <WeatherRainIcon/>]
+        ["11d", <ThunderstormIcon/>]
+        ["13d", <AcUnitIcon/>]
+        ["50d", <WeatherFogIcon/>]
+        ["01n", <WeatherClearNightIcon/>]
+        ["02n", <WeatherNightPartialyCloudyIcon/>]
+        ["03n", <WbCloudyIcon/>]
+        ["04n", <WbCloudyIcon/>]
+        ["09n", <WeatherRainIcon/>]
+        ["10n", <WeatherRainIcon/>]
+        ["11n", <ThunderstormIcon/>]
+        ["13n", <AcUnitIcon/>]
+        ["50n", <WeatherFogIcon/>]
+    ]
 
     useEffect(() => {
         buildForecast()

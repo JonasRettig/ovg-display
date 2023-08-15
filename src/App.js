@@ -9,10 +9,11 @@ import {
   Stack
 } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
-import { darkTheme } from './styles';
+import { createThemeWithMode } from './styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
+import Settings from "./Components/settings";
 
 <html>
 <p>print env secret to HTML</p>
@@ -23,7 +24,11 @@ export default function Home() {
 
   // Reload the page every 30 minutes
   setInterval(function() {
-    window.location.reload();
+    setBreakingNews([])
+    setNews([])
+    setCurrentWeather([])
+    setForecast([])
+    setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
@@ -39,14 +44,30 @@ export default function Home() {
   const [forecast, setForecast] = useState({})
   const [index, setIndex] = useState(0)
   const [dates, setDates] = useState({})
+  const [fetchesEnabled, setFetchesEnabled] = useState(false)
+  const [refetch, setRefetch] = useState(false)
+  const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
+  const [currentThemeName, setCurrentThemeName] = useState("dark")
+  
+  function handleCurrentThemeChange() {
+    if(currentThemeName === "dark") {
+      setCurrentThemeName("light")
+      setCurrentTheme(createThemeWithMode("light"))
+    } else {
+      setCurrentThemeName("dark")
+      setCurrentTheme(createThemeWithMode("dark"))
+    }
+  }
 
   useEffect(() => {
     buildNewsCards()
     rssFetcher()
-    //fetchNews();
-    //fetchCurrentWeather();
-    //fetchForecast();
-  }, []);
+    if(fetchesEnabled) {
+      fetchNews();
+      fetchCurrentWeather();
+      fetchForecast();
+    }
+  }, [fetchesEnabled, refetch]);
 
   useEffect(() => {
     buildNewsCards()
@@ -187,7 +208,7 @@ function createRows() {
 }
 
 return (
-  <ThemeProvider theme={darkTheme}>
+  <ThemeProvider theme={currentTheme}>
   <CssBaseline />
   <Box
     display="flex"
@@ -195,6 +216,7 @@ return (
     alignItems="center"
     alignContent="center"
   >
+    <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
     <Box
       display="flex"
       justifyContent="center"
@@ -265,7 +287,7 @@ return (
           }
         </Stack>
       </Stack>
-      <Weather currentWeather={currentWeather} forecast={forecast}/>
+      <Weather currentWeather={currentWeather} forecast={forecast} theme={currentTheme}/>
       </Stack>
     </Box>
   </Box>

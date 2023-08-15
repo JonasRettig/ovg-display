@@ -6,9 +6,8 @@ import {
     Card
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
-import { darkTheme } from '../styles';
 
-export default function Weather({currentWeather, forecast}) {
+export default function Weather({currentWeather, forecast, theme}) {
 
     const [forecastRender, setForecastRender] = useState([]);
 
@@ -41,7 +40,7 @@ export default function Weather({currentWeather, forecast}) {
     }
 
     return (
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
         <Typography> Wetter </Typography>
         {currentWeather.weather ?
         <Stack direction={"row"} spacing={2}>

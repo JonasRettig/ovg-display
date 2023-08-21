@@ -52,7 +52,7 @@ export default function Weather({weather, theme}) {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden  </Typography>
+                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
                             {returnIcon(item.weather[0].icon)}  
                             <Typography> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
@@ -63,10 +63,27 @@ export default function Weather({weather, theme}) {
         }
     }
 
+    const buildTimestamp = (timestamp) => {
+        // Create a new JavaScript Date object based on the timestamp
+        // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+        var date = new Date(timestamp * 1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+        // Will display time in 10:30:23 format
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        return formattedTime
+    }
+
+
     return (
         <ThemeProvider theme={theme}>
         <Typography> Wetter </Typography>
         {weather.current ?
+        <Stack direction="column" spacing={2}>
         <Stack direction={"row"} spacing={2}>
             <Stack key={weather.current.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                 <Typography> Aktuell  </Typography>
@@ -76,6 +93,20 @@ export default function Weather({weather, theme}) {
             {forecastRender.map((item) => {
                 return item;
             })}
+        </Stack>
+        {weather.alerts &&
+        <Stack>
+            <Typography> Warnungen </Typography>
+            {weather.alerts.map((item) => {
+                return (
+                    <Stack key={item.start} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                        <Typography> {item.event} </Typography>
+                        <Typography> {item.description} </Typography>
+                        <Typography> {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                    </Stack>
+                )
+            })}
+        </Stack>}
         </Stack>
         :
         <Typography> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>

@@ -27,22 +27,19 @@ export default function Home() {
   setInterval(function() {
     setBreakingNews([])
     setNews([])
-    setCurrentWeather([])
-    setForecast([])
+    setWeather({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
-  const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
-  const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
   const [news, setNews] = useState({})
   const [newsCards, setNewsCards] = useState([])
   const [breakingNews, setBreakingNews] = useState([])
-  const [currentWeather, setCurrentWeather] = useState({})
-  const [forecast, setForecast] = useState({})
+  const [weather, setWeather] = useState({})
   const [index, setIndex] = useState(0)
   const [dates, setDates] = useState({})
   const [fetchesEnabled, setFetchesEnabled] = useState(false)
@@ -69,8 +66,7 @@ export default function Home() {
     rssFetcher()
     if(fetchesEnabled) {
       fetchNews();
-      fetchCurrentWeather();
-      fetchForecast();
+      fetchWeather();
     }
   }, [fetchesEnabled, refetch]);
 
@@ -99,25 +95,12 @@ export default function Home() {
     );
 };
 
-async function fetchCurrentWeather() {
-  fetch(currentWeatherURL, { method: "GET" })
+async function fetchWeather() {
+  fetch(weatherURL, { method: "GET" })
     .then((res) => res.json())
     .then(  
       (result) => {
-        setCurrentWeather(result)
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-}
-
-async function fetchForecast() {
-  fetch(forecastURL, { method: "GET" })
-    .then((res) => res.json())
-    .then(  
-      (result) => {
-        setForecast(result)
+        setWeather(result)
       },
       (error) => {
         console.log(error);
@@ -201,7 +184,6 @@ function createRows() {
     var newRow = {}
     const titleParts = row.title[0].split(":");
     const descriptionParts = row.description[0].split("<br />");
-    console.log(descriptionParts)
     newRow.id = row.id
     newRow.title = titleParts[0] + ":" + titleParts[1];
     newRow.case = titleParts[2]; 
@@ -293,7 +275,7 @@ return (
           }
         </Stack>
       </Stack>
-      <Weather currentWeather={currentWeather} forecast={forecast} theme={currentTheme}/>
+      <Weather weather={weather} theme={currentTheme}/>
       </Stack>
     </Box>
   </Box>

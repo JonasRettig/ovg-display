@@ -12,13 +12,13 @@ import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined';
 import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Weather({currentWeather, forecast, theme}) {
+export default function Weather({weather, theme}) {
 
     const [forecastRender, setForecastRender] = useState([]);
 
     useEffect(() => {
-        buildForecast()
-    }, [forecast])
+        buildForecast(weather.hourly)
+    }, [weather])
 
     function returnIcon(iconID) {
         if(iconID === "01d") {
@@ -44,17 +44,17 @@ export default function Weather({currentWeather, forecast, theme}) {
         }
     }
 
-    function buildForecast() {
-        if (forecast.cod !== undefined) {
+    function buildForecast(forecast) {
+        if (forecast !== undefined) {
             var forecastBuilder = [];
-            const forecastTimes = Object.values(forecast.list).map((item) => {return item.dt}).sort().slice(1, 6);
-            Object.values(forecast.list).map((item) => {
+            const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
+            forecast.map((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden, um {timeStampHandler(item.dt_txt)} Uhr  </Typography>
+                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden  </Typography>
                             {returnIcon(item.weather[0].icon)}  
-                            <Typography> {item.weather[0].description} bei {item.main.temp}°C </Typography>
+                            <Typography> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
                     )
                 }
@@ -63,23 +63,15 @@ export default function Weather({currentWeather, forecast, theme}) {
         }
     }
 
-    function timeStampHandler(timeStamp) {
-        var hours = +timeStamp.split(' ')[1].split(':')[0] + 2
-        if (hours > 23) {
-            hours = hours - 24
-        }
-        return hours
-    }
-
     return (
         <ThemeProvider theme={theme}>
         <Typography> Wetter </Typography>
-        {currentWeather.weather ?
+        {weather.current ?
         <Stack direction={"row"} spacing={2}>
-            <Stack key={currentWeather.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+            <Stack key={weather.current.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                 <Typography> Aktuell  </Typography>
-                {returnIcon(currentWeather.weather[0].icon)}  
-                <Typography> {currentWeather.weather[0].description} bei {currentWeather.main.temp}°C</Typography>
+                {returnIcon(weather.current.weather[0].icon)}  
+                <Typography> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
             </Stack>
             {forecastRender.map((item) => {
                 return item;

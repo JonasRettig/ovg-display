@@ -13,6 +13,7 @@ import { createThemeWithMode } from './styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
+import WeatherMap from "./Components/weatherMap";
 import Settings from "./Components/settings";
 import { styled } from '@mui/material/styles';
 
@@ -223,15 +224,6 @@ return (
         justifyContent="center"
         alignItems="center"
       >
-        {/*
-        <Stack
-          direction={"column"}
-          spacing={2}
-        >
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=1&width=1000&height=500&tz=Europe%2FBerlin"/>
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=2&width=1000&height=500&tz=Europe%2FBerlin"/>
-        </Stack>
-        */}
         <Stack 
           direction={"column"}
           spacing={2}
@@ -276,6 +268,7 @@ return (
         </Stack>
       </Stack>
       <Weather weather={weather} theme={currentTheme}/>
+      <WeatherMap enabled={fetchesEnabled} refetch={refetch} />
       </Stack>
     </Box>
   </Box>

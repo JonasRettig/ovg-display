@@ -8,8 +8,12 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import {fromLonLat} from 'ol/proj';
 
 export default function WeatherMap({enabled, refetch}){
+
+    const OVGLonLat = [7.624711, 51.959875];
+    const OVGWebMercator = fromLonLat(OVGLonLat);
 
     useEffect(() => {
         //if(enabled) {
@@ -22,18 +26,18 @@ export default function WeatherMap({enabled, refetch}){
                     })
                 ],
                 view: new View({
-                    center: [52, 8],
+                    center: OVGWebMercator,
                     zoom: 9
                 })
             });
 
-            /*const weatherLayer = new TileLayer({
+            const weatherLayer = new TileLayer({
                 source: new OSM({
                     url: `https://tile.openweathermap.org/map/precipitation_new/9/52/8.png?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
                 })
             });
 
-            map.addLayer(weatherLayer);*/
+            map.addLayer(weatherLayer);
         //}
     }, [enabled, refetch]);
 

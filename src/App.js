@@ -14,6 +14,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
+import { styled } from '@mui/material/styles';
 
 <html>
 <p>print env secret to HTML</p>
@@ -48,6 +49,10 @@ export default function Home() {
   const [refetch, setRefetch] = useState(false)
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
+
+  const StyledCell = styled('div')({
+    color: 'red',
+  });  
   
   function handleCurrentThemeChange() {
     if(currentThemeName === "dark") {
@@ -196,12 +201,13 @@ function createRows() {
     var newRow = {}
     const titleParts = row.title[0].split(":");
     const descriptionParts = row.description[0].split("<br />");
+    console.log(descriptionParts)
     newRow.id = row.id
     newRow.title = titleParts[0] + ":" + titleParts[1];
     newRow.case = titleParts[2]; 
     newRow.type = descriptionParts[0].replace("Termin:", "").trim(); // remove "Termin:" and trim whitespace
     newRow.procedure = descriptionParts[1].replace("Verfahren:", "").trim(); // remove "Verfahren:" and trim whitespace
-    newRow.info = descriptionParts[2];
+    newRow.info = descriptionParts[3];
     finalRows.push(newRow)   
   })
   return finalRows
@@ -279,7 +285,7 @@ return (
             {(dates.rss && dates.rss.channel[0].item) ?
             <DataGrid
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150" }]}
+              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
             /> :
             <Typography> Heute finden keine Termine statt. </Typography>
             }

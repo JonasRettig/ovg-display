@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
     Typography,
     Stack,
-    Card
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import { WeatherFogIcon, WeatherRainIcon, WeatherDayPartialyCloudyIcon, WeatherNightPartialyCloudyIcon, WeatherClearNightIcon  } from "../styles";
@@ -11,6 +10,7 @@ import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import WbCloudyOutlinedIcon from '@mui/icons-material/WbCloudyOutlined';
 import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined';
 import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function Weather({currentWeather, forecast, theme}) {
 
@@ -39,6 +39,8 @@ export default function Weather({currentWeather, forecast, theme}) {
             return <WeatherClearNightIcon/>
         } else if(iconID === "02n") {
             return <WeatherNightPartialyCloudyIcon/>
+        } else {
+            return <ErrorOutlineIcon/>
         }
     }
 
@@ -49,12 +51,11 @@ export default function Weather({currentWeather, forecast, theme}) {
             Object.values(forecast.list).map((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Card key={item.dt}>
-                        <Typography> {item.dt_txt} </Typography>
-                            <Typography> {item.weather[0].description} </Typography>
+                    <Stack key={item.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden, um {timeStampHandler(item.dt_txt)} Uhr  </Typography>
                             {returnIcon(item.weather[0].icon)}  
-                            <Typography> {item.main.temp}°C </Typography>
-                    </Card>
+                            <Typography> {item.weather[0].description} bei {item.main.temp}°C </Typography>
+                    </Stack>
                     )
                 }
             setForecastRender(forecastBuilder);    
@@ -62,17 +63,24 @@ export default function Weather({currentWeather, forecast, theme}) {
         }
     }
 
+    function timeStampHandler(timeStamp) {
+        var hours = +timeStamp.split(' ')[1].split(':')[0] + 2
+        if (hours > 23) {
+            hours = hours - 24
+        }
+        return hours
+    }
+
     return (
         <ThemeProvider theme={theme}>
         <Typography> Wetter </Typography>
         {currentWeather.weather ?
         <Stack direction={"row"} spacing={2}>
-            <Card key={currentWeather.dt}>
-                <Typography> Aktuelles Wetter </Typography>
-                <Typography> {currentWeather.weather[0].description} </Typography>
+            <Stack key={currentWeather.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                <Typography> Aktuell  </Typography>
                 {returnIcon(currentWeather.weather[0].icon)}  
-                <Typography> {currentWeather.main.temp}°C </Typography>
-            </Card>
+                <Typography> {currentWeather.weather[0].description} bei {currentWeather.main.temp}°C</Typography>
+            </Stack>
             {forecastRender.map((item) => {
                 return item;
             })}

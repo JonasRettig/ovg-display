@@ -233,40 +233,35 @@ function createRows() {
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />
+  <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
   <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    alignContent="center"
+    height = "66vh"
   >
-    <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      sx={{ height: "80%", width : "80%"}}
+    <Stack
+      direction="row"
+      justifyContent="space-evenly"
     >
-      <Stack
-        direction="column"
-        spacing={2}
-        justifyContent={"center"}
-        alignItems="center"
-      >
-      <Stack
-        direction="row"
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
-      >
-        {/*
         <Stack
-          direction={"column"}
+          direction="column"
           spacing={2}
         >
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=1&width=1000&height=500&tz=Europe%2FBerlin"/>
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=2&width=1000&height=500&tz=Europe%2FBerlin"/>
+          {(dates !== null && dates !== undefined) &&
+          <>
+          <Typography> Termine </Typography>
+          {dates.rss &&
+            <Typography> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
+          }
+            {(dates.rss && dates.rss.channel[0].item) ?
+            <DataGrid
+              rows={createRows()}
+              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
+            /> :
+            <Typography> Heute finden keine Termine statt. </Typography>
+            }
+          </>
+          }
         </Stack>
-        */}
+        
         <Stack 
           direction={"column"}
           spacing={2}
@@ -289,31 +284,17 @@ return (
             </Card>
           }
         </Stack>
-        <Stack
-          direction="column"
-          spacing={2}
-        >
-          {(dates !== null && dates !== undefined) &&
-          <>
-          <Typography> Termine </Typography>
-          {dates.rss &&
-            <Typography> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
-          }
-            {(dates.rss && dates.rss.channel[0].item) ?
-            <DataGrid
-              rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
-            /> :
-            <Typography> Heute finden keine Termine statt. </Typography>
-            }
-          </>
-          }
         </Stack>
-      </Stack>
-      <Weather weather={weather} theme={currentTheme}/>
-      </Stack>
-    </Box>
-  </Box>
+        </Box>
+        <Box
+          height="33vh"
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+          alignItems="center"
+        >
+          <Weather weather={weather} theme={currentTheme}/>
+        </Box>
   </ThemeProvider>
 )
 }

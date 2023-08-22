@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import { createThemeWithMode } from './styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
-import { styled } from '@mui/material/styles';
+import NRWDivider from "./Components/nrwDivider";
 
 <html>
 <p>print env secret to HTML</p>
@@ -261,7 +262,7 @@ return (
           </>
           }
         </Stack>
-        
+        <NRWDivider direction={"row"}/>
         <Stack 
           direction={"column"}
           spacing={2}
@@ -286,6 +287,7 @@ return (
         </Stack>
         </Stack>
         </Box>
+        <NRWDivider direction={"column"}/>
         <Box
           height="33vh"
           display="flex"

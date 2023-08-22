@@ -21,20 +21,10 @@ import {
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Weather({weather, theme, currentThemeName}) {
-
-    useEffect(() => {
-        if(currentThemeName === "light") {
-            setIconColor("#000")
-        } else {
-            setIconColor("#fff")
-        }
-    }, [theme])
-
+export default function Weather({weather, theme}) {
     // the state that contains the forecast if it exists
     // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
-    const [iconColor, setIconColor] = useState("#000")
 
     //Size of all weather Icons
     const iconSize = 266;
@@ -114,7 +104,6 @@ export default function Weather({weather, theme, currentThemeName}) {
     return (
         <ThemeProvider theme={theme}>
         <Stack direction="column" margin={2}>
-        <Typography variant="h1" sx={{alignSelf: "center"}}> Wetter </Typography>
         {weather.current ?
         <Stack direction="column" spacing={2}>
         <Stack direction={"row"} spacing={2}>

@@ -1,5 +1,10 @@
 // This file contains most of the components for the site
 // Included here are the news feed, the rss feed, general styling and all fetch requests
+
+//! TODOS:
+// - [x] Test how breaking news are displayed
+// - [x] Test how weather warning are displayed
+
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -32,6 +37,7 @@ export default function Home() {
     setBreakingNews([])
     setNews([])
     setWeather({})
+    setDates({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
@@ -51,7 +57,9 @@ export default function Home() {
   const [dates, setDates] = useState({})
   // these states are necessary for the site to work properly
   const [index, setIndex] = useState(0)
-  const [fetchesEnabled, setFetchesEnabled] = useState(false)
+  const [rssEnabled, setRssEnabled] = useState(false)
+  const [newsEnabled, setNewsEnabled] = useState(false)
+  const [weatherEnabled, setWeatherEnabled] = useState(false)
   const [refetch, setRefetch] = useState(false)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
@@ -76,16 +84,51 @@ export default function Home() {
 
   // this useEffect is the main useEffect of the site
   // it pulls all the data from the APIs if the fetches are enabled
-  // ! the rss feed is not affected by this and is always fetched as it has no call limits
   // the news cards are always built as they create a needed fallback display if no news can be fetched
   useEffect(() => {
     buildNewsCards()
-    rssFetcher()
-    if(fetchesEnabled) {
+    if(rssEnabled) {
+      rssFetcher()
+    }
+    if(newsEnabled) {
       fetchNews();
+    }
+    if(weatherEnabled) {
       fetchWeather();
     }
-  }, [fetchesEnabled, refetch]);
+  }, []);
+
+  useEffect(() => {
+    buildNewsCards()
+    if(rssEnabled) {
+      rssFetcher()
+    }
+    if(newsEnabled) {
+      fetchNews();
+    }
+    if(weatherEnabled) {
+      fetchWeather();
+    }
+  }, [refetch]);
+
+  useEffect(() => {
+    if(rssEnabled) {
+      rssFetcher()
+    }
+  }, [rssEnabled]);
+
+  useEffect(() => {
+    buildNewsCards()
+    if(newsEnabled) {
+      fetchNews();
+    }
+  }, [newsEnabled]);
+
+  useEffect(() => {
+    if(weatherEnabled) {
+      fetchWeather();
+    }
+  }, [weatherEnabled]);
 
   // if the news are fetched we build new news cards
   useEffect(() => {
@@ -235,7 +278,22 @@ function createRows() {
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />
-  <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
+  <Settings 
+    currentThemeName={currentThemeName} 
+    handleCurrentThemeChange={handleCurrentThemeChange} 
+    rssEnabled={rssEnabled} 
+    setRssEnabled={setRssEnabled}
+    newsEnabled={newsEnabled}
+    setNewsEnabled={setNewsEnabled}
+    weatherEnabled={weatherEnabled}
+    setWeatherEnabled={setWeatherEnabled}
+    setBreakingNews={setBreakingNews}
+    setNews={setNews}
+    setWeather={setWeather}
+    setDates={setDates}
+    setRefetch={setRefetch}
+    refetch={refetch}
+  />
   <Box
     height = "66vh"
     sx={{overflow: "hidden"}}
@@ -278,7 +336,7 @@ return (
               <CardMedia
                 component="img"
                 image={newsCards[index].image}
-                height="1080px"
+                height="960px"
                 width="1920px"
                 style={{ objectFit: 'contain' }}
               />

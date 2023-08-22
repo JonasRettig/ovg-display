@@ -1,3 +1,5 @@
+// This file contains most of the components for the site
+// Included here are the news feed, the rss feed, general styling and all fetch requests
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -14,6 +16,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
+import { styled } from '@mui/material/styles';
 
 <html>
 <p>print env secret to HTML</p>
@@ -23,32 +26,43 @@ import Settings from "./Components/settings";
 export default function Home() {
 
   // Reload the page every 30 minutes
+  // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
     setBreakingNews([])
     setNews([])
-    setCurrentWeather([])
-    setForecast([])
+    setWeather({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
+  // all relevant fetch URLs
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
-  const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
-  const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=51.959775&lon=7.624631&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  // the cors proxy url that is needed to fetch the rss feed
+  // the proxy is deployed on cloudflare with this script https://github.com/Zibri/cloudflare-cors-anywhere
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
 
+  // these states hold the site content
   const [news, setNews] = useState({})
   const [newsCards, setNewsCards] = useState([])
   const [breakingNews, setBreakingNews] = useState([])
-  const [currentWeather, setCurrentWeather] = useState({})
-  const [forecast, setForecast] = useState({})
-  const [index, setIndex] = useState(0)
+  const [weather, setWeather] = useState({})
   const [dates, setDates] = useState({})
+  // these states are necessary for the site to work properly
+  const [index, setIndex] = useState(0)
   const [fetchesEnabled, setFetchesEnabled] = useState(false)
   const [refetch, setRefetch] = useState(false)
+  // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
+
+  // a custom styling that changes a cells text to be red
+  // used to paint cancelled court dates red
+  const StyledCell = styled('div')({
+    color: 'red',
+  });  
   
+  // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
     if(currentThemeName === "dark") {
       setCurrentThemeName("light")
@@ -59,21 +73,27 @@ export default function Home() {
     }
   }
 
+  // this useEffect is the main useEffect of the site
+  // it pulls all the data from the APIs if the fetches are enabled
+  // ! the rss feed is not affected by this and is always fetched as it has no call limits
+  // the news cards are always built as they create a needed fallback display if no news can be fetched
   useEffect(() => {
     buildNewsCards()
     rssFetcher()
     if(fetchesEnabled) {
       fetchNews();
-      fetchCurrentWeather();
-      fetchForecast();
+      fetchWeather();
     }
   }, [fetchesEnabled, refetch]);
 
+  // if the news are fetched we build new news cards
   useEffect(() => {
     buildNewsCards()
   }, [news]);
 
-
+  // the use effect that automatically switches the news card every 15 seconds
+  // it is dependent on the news cards length so that it does not switch to a card that doesnt exist
+  // due to this it is recalled every time the news card length changes
   useEffect(() => {
     const intervalId = setInterval(() => {
       setIndex((index) => (index + 1) % newsCards.length);
@@ -81,6 +101,7 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, [newsCards.length]);
 
+  // the function that fetches news from the tagesschau
   async function fetchNews () {
     fetch(tagesschauAPI, { method: "GET" })
     .then((res) => res.json())
@@ -94,12 +115,13 @@ export default function Home() {
     );
 };
 
-async function fetchCurrentWeather() {
-  fetch(currentWeatherURL, { method: "GET" })
+// the function that fetches the weather from openweathermap
+async function fetchWeather() {
+  fetch(weatherURL, { method: "GET" })
     .then((res) => res.json())
     .then(  
       (result) => {
-        setCurrentWeather(result)
+        setWeather(result)
       },
       (error) => {
         console.log(error);
@@ -107,37 +129,30 @@ async function fetchCurrentWeather() {
     );
 }
 
-async function fetchForecast() {
-  fetch(forecastURL, { method: "GET" })
-    .then((res) => res.json())
-    .then(  
-      (result) => {
-        setForecast(result)
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-}
-
+// the function that builds the news cards
 async function buildNewsCards() {
   var newsCardsToAdd = []
+  // only build the cards if there are news
   if(news.news) {
       news.news.map((report) => {
+        // we map through all news, if they arent a video story or breaking news the image, title and a short text are added to the cards array 
         if(report.content){
           if (!report.breakingNews) { 
           newsCardsToAdd.push({
+            // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
             image: report.teaserImage.imageVariants["16x9-1920"],
             title: report.title,
             text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
           }
           )} else {
+            // breaking news are handled in another function
             handleBreakingNews(report)
           }
         }
       })
     setNewsCards(newsCardsToAdd)
   }
+  // if there are no news we build a single card that informs useres that the fetch failed
   else {
     setNewsCards([{
           image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
@@ -147,8 +162,11 @@ async function buildNewsCards() {
   }
 }
 
+// breaking news are built as their own card
 function handleBreakingNews(report) {
   setBreakingNews(
+    // this card has a red background, is not forced to have an image and has EIL +++ added to the title
+    // this card is always displayed as long as it exists and doesn't cycle
     <Card style={{ backgroundColor: 'red' }}>
       <CardContent>
         {report.teaserImage &&
@@ -168,6 +186,7 @@ function handleBreakingNews(report) {
   )
 }
 
+// the ress fetched from the OVG display
 function rssFetcher() {
   var request = new XMLHttpRequest();
   var parseString = require('xml2js').parseString;
@@ -183,15 +202,19 @@ function rssFetcher() {
   request.send();
 }
 
+// function that creates the rows for the data grid
+// for the data from the rss feed
 function createRows() {
   var rows = []
   var id = 0
+  // every row gets a unique id
   dates.rss.channel[0].item.map((row) => {
     row["id"] = id
     id++
   })
   rows = dates.rss.channel[0].item
   var finalRows = []
+  // the rows are built from split rows from the rss call
   rows.map((row) => { 
     var newRow = {}
     const titleParts = row.title[0].split(":");
@@ -201,7 +224,7 @@ function createRows() {
     newRow.case = titleParts[2]; 
     newRow.type = descriptionParts[0].replace("Termin:", "").trim(); // remove "Termin:" and trim whitespace
     newRow.procedure = descriptionParts[1].replace("Verfahren:", "").trim(); // remove "Verfahren:" and trim whitespace
-    newRow.info = descriptionParts[2];
+    newRow.info = descriptionParts[3];
     finalRows.push(newRow)   
   })
   return finalRows
@@ -279,7 +302,7 @@ return (
             {(dates.rss && dates.rss.channel[0].item) ?
             <DataGrid
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150" }]}
+              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
             /> :
             <Typography> Heute finden keine Termine statt. </Typography>
             }
@@ -287,7 +310,7 @@ return (
           }
         </Stack>
       </Stack>
-      <Weather currentWeather={currentWeather} forecast={forecast} theme={currentTheme}/>
+      <Weather weather={weather} theme={currentTheme}/>
       </Stack>
     </Box>
   </Box>

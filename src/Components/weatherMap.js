@@ -16,12 +16,17 @@ export default function WeatherMap({enabled, refetch}){
     const OVGWebMercator = fromLonLat(OVGLonLat);
 
     useEffect(() => {
-        //if(enabled) {
+        if(enabled) {
             const map = new Map({
                 controls: [],
                 target: 'map',
                 layers: [
                     new TileLayer({
+                        source: new OSM({
+                          url: `https://tile.openweathermap.org/map/precipitation_new/9/52/8.png?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
+                        })
+                      }),
+                      new TileLayer({
                         source: new OSM()
                     })
                 ],
@@ -30,24 +35,17 @@ export default function WeatherMap({enabled, refetch}){
                     zoom: 9
                 })
             });
-
-            const weatherLayer = new TileLayer({
-                source: new OSM({
-                    url: `https://tile.openweathermap.org/map/precipitation_new/9/52/8.png?appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
-                })
-            });
-
-            map.addLayer(weatherLayer);
-        //}
+        }
     }, [enabled, refetch]);
 
     return(
         <Stack>
             <Typography>WeatherMap</Typography>
-            {/* enabled ? */
+            {enabled ?
             <div id="map" style={{width: "500px", height: "500px"}}></div>
-            /*: 
-        <Typography> WeatherMap is disabled </Typography>*/}
+            : 
+        <Typography> WeatherMap is disabled </Typography>
+        }
         </Stack>
     )
 }

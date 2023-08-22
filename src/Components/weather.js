@@ -1,3 +1,4 @@
+// component that build the main weather widget for the site
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -14,12 +15,17 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function Weather({weather, theme}) {
 
+    // the state that contains the forecast if it exists
+    // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
 
+    // use effect that builds the forecast if the weather state changes
     useEffect(() => {
         buildForecast(weather.hourly)
     }, [weather])
 
+    // function that returns the correct icon for the weather
+    // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
     function returnIcon(iconID) {
         if(iconID === "01d") {
             return <WbSunnyOutlinedIcon/>
@@ -44,9 +50,11 @@ export default function Weather({weather, theme}) {
         }
     }
 
+    // function that build the forecast for the next 5h from the data given
     function buildForecast(forecast) {
         if (forecast !== undefined) {
             var forecastBuilder = [];
+            // gets the next 5h by slicing an array sorted by the time stamp
             const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
             forecast.map((item) => {
                 if (forecastTimes.includes(item.dt)) {

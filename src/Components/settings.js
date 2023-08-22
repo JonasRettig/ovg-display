@@ -1,3 +1,6 @@
+// a component that defines a small settings window for the site
+// not really needed for the final production, built this so i can easily showcase light and dark theme
+// and to disable the fetches for the weather and the news so I don't get rate limited while developing
 import {React, useState} from 'react';
 import { 
     Dialog, 
@@ -15,6 +18,7 @@ import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
 
 export default function Settings({currentThemeName, handleCurrentThemeChange, fetchesEnabled, setFetchesEnabled}) {
     
+    // state that defines if the window is open or not
     const [showSettings, setShowSettings] = useState(false);
     
     return (

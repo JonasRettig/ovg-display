@@ -14,6 +14,7 @@ export default function NRWDivider({direction}) {
 
     return (
         <Stack
+            margin="30px"
             direction={direction}
             spacing={0.5}
         >

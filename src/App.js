@@ -176,10 +176,10 @@ function handleBreakingNews(report) {
           image={report.teaserImage.imageVariants["16x9-1920"]}
         />
         }
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h1" component="div">
           EIL +++ {report.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="h2" color="text.secondary">
           {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
         </Typography>
       </CardContent>
@@ -231,12 +231,14 @@ function createRows() {
   return finalRows
 }
 
+// ! Styling could eventually be done with pixel numbers as its only going to be deployed on 4k screens
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />
   <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
   <Box
     height = "66vh"
+    sx={{overflow: "hidden"}}
   >
     <Stack
       direction="row"
@@ -248,14 +250,15 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography> Termine </Typography>
+          <Typography variant="h1"> Termine </Typography>
           {dates.rss &&
-            <Typography> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
+            <Typography variant="h1"> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
           }
             {(dates.rss && dates.rss.channel[0].item) ?
             <DataGrid
+              sx={{fontSize: "30px"}}
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
+              columns={[{ field: 'title', headerName: "Zeit", width: "320" }, { field: 'case', headerName: 'Aktenzeichen', width: "320" }, { field: 'type', headerName: 'Typ', width: "320" }, { field: 'procedure', headerName: 'Verfahren', width: "320" }, { field: 'info', headerName: 'Info', width: "320", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
             /> :
             <Typography> Heute finden keine Termine statt. </Typography>
             }
@@ -269,16 +272,21 @@ return (
         >
           {breakingNews}
           {newsCards[index] &&
-          <Card>
+          <Card
+            sx={{width:"2100px"}}
+          >
               <CardMedia
                 component="img"
                 image={newsCards[index].image}
+                height="1080px"
+                width="1920px"
+                style={{ objectFit: 'contain' }}
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="h1" component="div">
                   {newsCards[index].title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="h2" color="text.secondary">
                   {newsCards[index].text}
                 </Typography>
               </CardContent>
@@ -295,7 +303,7 @@ return (
           alignContent="center"
           alignItems="center"
         >
-          <Weather weather={weather} theme={currentTheme}/>
+          <Weather weather={weather} theme={currentTheme} currentThemeName={currentThemeName}/>
         </Box>
   </ThemeProvider>
 )

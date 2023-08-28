@@ -1,5 +1,10 @@
 // This file contains most of the components for the site
 // Included here are the news feed, the rss feed, general styling and all fetch requests
+
+//! TODOS:
+// - [x] Change dates display
+// - [x] Test how weather warning are displayed
+
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -12,11 +17,12 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import { createThemeWithMode } from './styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
-import { styled } from '@mui/material/styles';
+import NRWDivider from "./Components/nrwDivider";
 
 <html>
 <p>print env secret to HTML</p>
@@ -29,8 +35,9 @@ export default function Home() {
   // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
     setBreakingNews([])
-    setNews([])
+    setNews({})
     setWeather({})
+    setDates({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
@@ -50,7 +57,9 @@ export default function Home() {
   const [dates, setDates] = useState({})
   // these states are necessary for the site to work properly
   const [index, setIndex] = useState(0)
-  const [fetchesEnabled, setFetchesEnabled] = useState(false)
+  const [rssEnabled, setRssEnabled] = useState(false)
+  const [newsEnabled, setNewsEnabled] = useState(false)
+  const [weatherEnabled, setWeatherEnabled] = useState(false)
   const [refetch, setRefetch] = useState(false)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
@@ -75,16 +84,51 @@ export default function Home() {
 
   // this useEffect is the main useEffect of the site
   // it pulls all the data from the APIs if the fetches are enabled
-  // ! the rss feed is not affected by this and is always fetched as it has no call limits
   // the news cards are always built as they create a needed fallback display if no news can be fetched
   useEffect(() => {
     buildNewsCards()
-    rssFetcher()
-    if(fetchesEnabled) {
+    if(rssEnabled) {
+      rssFetcher()
+    }
+    if(newsEnabled) {
       fetchNews();
+    }
+    if(weatherEnabled) {
       fetchWeather();
     }
-  }, [fetchesEnabled, refetch]);
+  }, []);
+
+  useEffect(() => {
+    buildNewsCards()
+    if(rssEnabled) {
+      rssFetcher()
+    }
+    if(newsEnabled) {
+      fetchNews();
+    }
+    if(weatherEnabled) {
+      fetchWeather();
+    }
+  }, [refetch]);
+
+  useEffect(() => {
+    if(rssEnabled) {
+      rssFetcher()
+    }
+  }, [rssEnabled]);
+
+  useEffect(() => {
+    buildNewsCards()
+    if(newsEnabled) {
+      fetchNews();
+    }
+  }, [newsEnabled]);
+
+  useEffect(() => {
+    if(weatherEnabled) {
+      fetchWeather();
+    }
+  }, [weatherEnabled]);
 
   // if the news are fetched we build new news cards
   useEffect(() => {
@@ -167,18 +211,12 @@ function handleBreakingNews(report) {
   setBreakingNews(
     // this card has a red background, is not forced to have an image and has EIL +++ added to the title
     // this card is always displayed as long as it exists and doesn't cycle
-    <Card style={{ backgroundColor: 'red' }}>
+    <Card style={{ backgroundColor: 'red' }} sx={{width:"3000px"}}>
       <CardContent>
-        {report.teaserImage &&
-        <CardMedia
-          component="img"
-          image={report.teaserImage.imageVariants["16x9-1920"]}
-        />
-        }
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h1" component="div">
           EIL +++ {report.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="h2" color="text.secondary">
           {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
         </Typography>
       </CardContent>
@@ -230,90 +268,95 @@ function createRows() {
   return finalRows
 }
 
+// ! Styling could eventually be done with pixel numbers as its only going to be deployed on 4k screens
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />
+  <Settings 
+    currentThemeName={currentThemeName} 
+    handleCurrentThemeChange={handleCurrentThemeChange} 
+    rssEnabled={rssEnabled} 
+    setRssEnabled={setRssEnabled}
+    newsEnabled={newsEnabled}
+    setNewsEnabled={setNewsEnabled}
+    weatherEnabled={weatherEnabled}
+    setWeatherEnabled={setWeatherEnabled}
+    setBreakingNews={setBreakingNews}
+    setNews={setNews}
+    setWeather={setWeather}
+    setDates={setDates}
+    setRefetch={setRefetch}
+    refetch={refetch}
+  />
   <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    alignContent="center"
+    height = "66vh"
+    sx={{overflow: "hidden"}}
   >
-    <Settings currentThemeName={currentThemeName} handleCurrentThemeChange={handleCurrentThemeChange} fetchesEnabled={fetchesEnabled} setFetchesEnabled={setFetchesEnabled}/>
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      sx={{ height: "80%", width : "80%"}}
+    <Stack
+      direction="row"
+      justifyContent="space-evenly"
     >
-      <Stack
-        direction="column"
-        spacing={2}
-        justifyContent={"center"}
-        alignItems="center"
-      >
-      <Stack
-        direction="row"
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
-      >
-        {/*
-        <Stack
-          direction={"column"}
-          spacing={2}
-        >
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=1&width=1000&height=500&tz=Europe%2FBerlin"/>
-          <img src="https://grafana.freifunk-muensterland.de/render/d-solo/000000021/advanced-node-stats?refresh=30s&orgId=1&var-node=000a5e219c4e&theme=light&panelId=2&width=1000&height=500&tz=Europe%2FBerlin"/>
-        </Stack>
-        */}
-        <Stack 
-          direction={"column"}
-          spacing={2}
-        >
-          {breakingNews}
-          {newsCards[index] &&
-          <Card>
-              <CardMedia
-                component="img"
-                image={newsCards[index].image}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {newsCards[index].title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {newsCards[index].text}
-                </Typography>
-              </CardContent>
-            </Card>
-          }
-        </Stack>
         <Stack
           direction="column"
           spacing={2}
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography> Termine </Typography>
+          <Typography variant="h1"> Termine </Typography>
           {dates.rss &&
-            <Typography> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
+            <Typography variant="h1"> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
           }
             {(dates.rss && dates.rss.channel[0].item) ?
             <DataGrid
+              sx={{fontSize: "30px"}}
               rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "150" }, { field: 'case', headerName: 'Aktenzeichen', width: "150" }, { field: 'type', headerName: 'Typ', width: "150" }, { field: 'procedure', headerName: 'Verfahren', width: "150" }, { field: 'info', headerName: 'Info', width: "150", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
+              columns={[{ field: 'title', headerName: "Zeit", width: "320" }, { field: 'case', headerName: 'Aktenzeichen', width: "320" }, { field: 'type', headerName: 'Typ', width: "320" }, { field: 'procedure', headerName: 'Verfahren', width: "320" }, { field: 'info', headerName: 'Info', width: "320", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
             /> :
             <Typography> Heute finden keine Termine statt. </Typography>
             }
           </>
           }
         </Stack>
-      </Stack>
-      <Weather weather={weather} theme={currentTheme}/>
-      </Stack>
-    </Box>
-  </Box>
+        <NRWDivider direction={"row"}/>
+        <Stack 
+          direction={"column"}
+          spacing={2}
+        >
+          {breakingNews}
+          {newsCards[index] &&
+          <Card
+            sx={{width:"3000px"}}
+          >
+              <CardMedia
+                component="img"
+                image={newsCards[index].image}
+                height="960px"
+                width="2500px"
+                style={{ objectFit: 'contain' }}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h1" component="div">
+                  {newsCards[index].title}
+                </Typography>
+                <Typography variant="h2" color="text.secondary">
+                  {newsCards[index].text}
+                </Typography>
+              </CardContent>
+            </Card>
+          }
+        </Stack>
+        </Stack>
+        </Box>
+        <NRWDivider direction={"column"}/>
+        <Box
+          height="33vh"
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+          alignItems="center"
+        >
+          <Weather weather={weather} theme={currentTheme} currentThemeName={currentThemeName}/>
+        </Box>
   </ThemeProvider>
 )
 }

@@ -4,20 +4,32 @@ import { useState, useEffect } from "react";
 import {
     Typography,
     Stack,
+    Card,
+    CardContent
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
-import { WeatherFogIcon, WeatherRainIcon, WeatherDayPartialyCloudyIcon, WeatherNightPartialyCloudyIcon, WeatherClearNightIcon  } from "../styles";
-import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
-import WbCloudyOutlinedIcon from '@mui/icons-material/WbCloudyOutlined';
-import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined';
-import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined';
+import {
+    WiDaySunny,
+    WiDayCloudy,
+    WiCloud,
+    WiCloudy,
+    WiRain,
+    WiDayRain,
+    WiThunderstorm,
+    WiSnow,
+    WiDayFog,
+    WiNightFog,
+    WiNightAltRain
+} from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function Weather({weather, theme}) {
-
     // the state that contains the forecast if it exists
     // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
+
+    //Size of all weather Icons
+    const iconSize = 266;
 
     // use effect that builds the forecast if the weather state changes
     useEffect(() => {
@@ -28,25 +40,29 @@ export default function Weather({weather, theme}) {
     // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
     function returnIcon(iconID) {
         if(iconID === "01d") {
-            return <WbSunnyOutlinedIcon/>
+            return <WiDaySunny size={iconSize}/>
         } else if(iconID === "02d") {
-            return <WeatherDayPartialyCloudyIcon/>
-        } else if(iconID === "03d" || iconID === "03n" || iconID === "04d" || iconID === "04n") {
-            return <WbCloudyOutlinedIcon/>
-        } else if(iconID === "09d" || iconID === "09n" || iconID === "10d" || iconID === "10n") {
-            return <WeatherRainIcon/>
-        } else if(iconID === "11d" || iconID === "11n") {
-            return <ThunderstormOutlinedIcon/>
-        } else if(iconID === "13d" || iconID === "13n") {
-            return <AcUnitOutlinedIcon/>
-        } else if(iconID === "50d" || iconID === "50n") {
-            return <WeatherFogIcon/>
-        } else if(iconID === "01n") {
-            return <WeatherClearNightIcon/>
-        } else if(iconID === "02n") {
-            return <WeatherNightPartialyCloudyIcon/>
+            return <WiDayCloudy size={iconSize}/>
+        } else if(iconID === "03d" || iconID === "03n") {
+            return <WiCloud size={iconSize}/>
+        } else if(iconID === "04d" || iconID === "04n") {
+            return <WiCloudy size={iconSize}/>
+        } else if (iconID === "09d" || iconID === "09n") {
+            return <WiRain size={iconSize}/>
+        } else if (iconID === "10d") {
+            return <WiDayRain size={iconSize}/>
+        } else if (iconID === "10n") {
+            return <WiNightAltRain size={iconSize}/>
+        } else if (iconID === "11d" || iconID === "11n") {
+            return <WiThunderstorm size={iconSize}/>
+        } else if (iconID === "13d" || iconID === "13n") {
+            return <WiSnow size={iconSize}/>
+        } else if (iconID === "50d") {
+            return <WiDayFog size={iconSize}/>
+        } else if (iconID === "50n") {
+            return <WiNightFog size={iconSize}/>
         } else {
-            return <ErrorOutlineIcon/>
+            return <ErrorOutlineIcon sx={{fontSize: "266px"}} />
         }
     }
 
@@ -60,9 +76,9 @@ export default function Weather({weather, theme}) {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
+                        <Typography variant="h2"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
                             {returnIcon(item.weather[0].icon)}  
-                            <Typography> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
+                            <Typography variant="h2"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
                     )
                 }
@@ -89,36 +105,39 @@ export default function Weather({weather, theme}) {
 
     return (
         <ThemeProvider theme={theme}>
-        <Typography> Wetter </Typography>
+        <Stack direction="column" margin={2}>
         {weather.current ?
         <Stack direction="column" spacing={2}>
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={5}>
             <Stack key={weather.current.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                <Typography> Aktuell  </Typography>
+                <Typography variant="h2"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
-                <Typography> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
+                <Typography variant="h2"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
             </Stack>
             {forecastRender.map((item) => {
                 return item;
             })}
         </Stack>
         {weather.alerts &&
-        <Stack>
-            <Typography> Warnungen </Typography>
+        <Stack direction={"row"} spacing={1}>
             {weather.alerts.map((item) => {
                 return (
+                    <Card>
+                    <CardContent style={{ backgroundColor: 'red' }}>
                     <Stack key={item.start} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography> {item.event} </Typography>
-                        <Typography> {item.description} </Typography>
-                        <Typography> {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h1"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h3"> {item.description} </Typography>
                     </Stack>
+                    </CardContent>
+                    </Card>
                 )
             })}
         </Stack>}
         </Stack>
         :
-        <Typography> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
+        <Typography variant="h1"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
         }
+        </Stack>
         </ThemeProvider>
     )
 }

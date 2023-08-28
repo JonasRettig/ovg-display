@@ -1,10 +1,6 @@
 // This file contains most of the components for the site
 // Included here are the news feed, the rss feed, general styling and all fetch requests
 
-//! TODOS:
-// - [x] Change dates display
-// - [x] Build system that autoamtically aranges stuff properly if certain elements are rendered
-
 import React from "react";
 import { useState, useEffect } from "react";
 import {

@@ -23,7 +23,7 @@ import {
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Weather({weather, warnings, theme}) {
+export default function Weather({weather, warnings, setWeatherWarningsExist, theme}) {
     // the state that contains the forecast if it exists
     // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
@@ -136,6 +136,11 @@ export default function Weather({weather, warnings, theme}) {
                 }
         }
         )}
+        if(warningsToAdd.length > 0){ 
+            setWeatherWarningsExist(true)
+        } else {
+            setWeatherWarningsExist(false)
+        }
         setRelevantWarnings(warningsToAdd)
     }
 

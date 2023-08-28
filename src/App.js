@@ -57,10 +57,15 @@ export default function Home() {
   const [rssEnabled, setRssEnabled] = useState(false)
   const [newsEnabled, setNewsEnabled] = useState(false)
   const [weatherEnabled, setWeatherEnabled] = useState(false)
+  const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
+  // these states provide the size of the components. They are provided in [width, height]
+  const [datesSize, setDatesSize] = useState(1)
+  const [newsSize, setNewsSize] = useState([1,1])
+  const [newsImageSize, setNewsImageSize] = useState([1,1])
 
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
@@ -88,46 +93,16 @@ export default function Home() {
       fetchWeather();
       fetchWarnings();
     }
-  }, []);
-
-  useEffect(() => {
-    buildNewsCards()
-    if(rssEnabled) {
-      rssFetcher()
-    }
-    if(newsEnabled) {
-      fetchNews();
-    }
-    if(weatherEnabled) {
-      fetchWeather();
-      fetchWarnings();
-    }
-  }, [refetch]);
-
-  useEffect(() => {
-    if(rssEnabled) {
-      rssFetcher()
-    }
-  }, [rssEnabled]);
-
-  useEffect(() => {
-    buildNewsCards()
-    if(newsEnabled) {
-      fetchNews();
-    }
-  }, [newsEnabled]);
-
-  useEffect(() => {
-    if(weatherEnabled) {
-      fetchWeather();
-      fetchWarnings();
-    }
-  }, [weatherEnabled]);
+  }, [refetch, rssEnabled, newsEnabled, weatherEnabled]);
 
   // if the news are fetched we build new news cards
   useEffect(() => {
     buildNewsCards()
   }, [news]);
+
+  useEffect(() => {
+    determineLayout()
+  }, [news, breakingNews, weather, warnings, dates, refetch]);
 
   // the use effect that automatically switches the news card every 15 seconds
   // it is dependent on the news cards length so that it does not switch to a card that doesnt exist
@@ -179,6 +154,36 @@ async function fetchWarnings() {
         console.log(error);
       }
     );
+}
+
+// this function determines the layout of the site
+// it is called every time the content of the site changes
+function determineLayout() {
+  //4k resolution is 3840 × 2160 
+  //if there are both weather warnings and breaking news
+  if(weatherWarningsExist && breakingNews.length > 0) {
+    setDatesSize(1)
+    setNewsSize([3000, 1])
+    setNewsImageSize([1, 1000])
+  } 
+  //if there are only weather warnings
+  else if(weatherWarningsExist) {
+    setDatesSize(1)
+    setNewsSize([1, 1])
+    setNewsImageSize([1, 1000])
+  }
+  //if there are only breaking news
+  else if(breakingNews.length > 0) {
+    setDatesSize(1)
+    setNewsSize([3000, 1])
+    setNewsImageSize([1, 1000])
+  }
+  //if nothing special happens
+  else {
+    setDatesSize(1000)
+    setNewsSize([2500, 1])
+    setNewsImageSize([1, 800])
+  }
 }
 
 // the function that builds the news cards
@@ -297,12 +302,14 @@ return (
     refetch={refetch}
   />
   <Box
-    height = "66vh"
+    height = "63vh"
     sx={{overflow: "hidden"}}
   >
     <Stack
+      marginTop="50px"
       direction="row"
       justifyContent="space-evenly"
+      alignContent={"center"}
     >
         <Stack
           direction="column"
@@ -314,7 +321,7 @@ return (
             {(dates.length > 0) ?
             dates.map((row) => {
               return (
-                <Card key={row.id} sx={{width:"700px"}}>
+                <Card key={row.id} sx={{width:datesSize}}>
                   <CardContent>
                     <Typography gutterBottom variant="h1" component="div">
                       {row.title}
@@ -348,13 +355,13 @@ return (
           {breakingNews}
           {newsCards[index] &&
           <Card
-            sx={{width:"3000px"}}
+            sx={{width:newsSize[0], height:newsSize[1]}}
           >
               <CardMedia
                 component="img"
                 image={newsCards[index].image}
-                height="960px"
-                width="2500px"
+                height={newsImageSize[1]}
+                width={newsImageSize[0]}
                 style={{ objectFit: 'contain' }}
               />
               <CardContent>
@@ -378,7 +385,7 @@ return (
           alignContent="center"
           alignItems="center"
         >
-          <Weather weather={weather} warnings={warnings} theme={currentTheme}/>
+          <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} theme={currentTheme}/>
         </Box>
   </ThemeProvider>
 )

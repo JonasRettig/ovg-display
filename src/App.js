@@ -13,9 +13,7 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import { createThemeWithMode } from './styles';
-import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { DataGrid } from '@mui/x-data-grid';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
 import NRWDivider from "./Components/nrwDivider";
@@ -64,12 +62,6 @@ export default function Home() {
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
 
-  // a custom styling that changes a cells text to be red
-  // used to paint cancelled court dates red
-  const StyledCell = styled('div')({
-    color: 'red',
-  });  
-  
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
     if(currentThemeName === "dark") {
@@ -197,14 +189,14 @@ async function buildNewsCards() {
       news.news.map((report) => {
         // we map through all news, if they arent a video story or breaking news the image, title and a short text are added to the cards array 
         if(report.content){
-          if (!report.breakingNews) { 
+          if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") { 
           newsCardsToAdd.push({
             // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
             image: report.teaserImage.imageVariants["16x9-1920"],
             title: report.title,
             text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
           }
-          )} else {
+          )} else if (report.breakingNews) {
             // breaking news are handled in another function
             handleBreakingNews(report)
           }
@@ -248,7 +240,7 @@ function rssFetcher() {
     if (request.readyState === 4 && request.status === 200) {
       var myObj = request.responseText;
       parseString(myObj, function (err, result) {
-        setDates(result)
+        createRows(result)
     });
     }
   }
@@ -258,15 +250,15 @@ function rssFetcher() {
 
 // function that creates the rows for the data grid
 // for the data from the rss feed
-function createRows() {
+function createRows(result) {
   var rows = []
   var id = 0
   // every row gets a unique id
-  dates.rss.channel[0].item.map((row) => {
+  result.rss.channel[0].item.map((row) => {
     row["id"] = id
     id++
   })
-  rows = dates.rss.channel[0].item
+  rows = result.rss.channel[0].item
   var finalRows = []
   // the rows are built from split rows from the rss call
   rows.map((row) => { 
@@ -275,13 +267,13 @@ function createRows() {
     const descriptionParts = row.description[0].split("<br />");
     newRow.id = row.id
     newRow.title = titleParts[0] + ":" + titleParts[1];
-    newRow.case = titleParts[2]; 
+    newRow.case = titleParts[2].split('-')[0];
     newRow.type = descriptionParts[0].replace("Termin:", "").trim(); // remove "Termin:" and trim whitespace
     newRow.procedure = descriptionParts[1].replace("Verfahren:", "").trim(); // remove "Verfahren:" and trim whitespace
     newRow.info = descriptionParts[3];
     finalRows.push(newRow)   
   })
-  return finalRows
+  setDates(finalRows)
 }
 
 // ! Styling could eventually be done with pixel numbers as its only going to be deployed on 4k screens
@@ -319,15 +311,30 @@ return (
           {(dates !== null && dates !== undefined) &&
           <>
           <Typography variant="h1"> Termine </Typography>
-          {dates.rss &&
-            <Typography variant="h1"> Letzte Aktualisierung: {dates.rss.channel[0].lastBuildDate[0]} </Typography>
-          }
-            {(dates.rss && dates.rss.channel[0].item) ?
-            <DataGrid
-              sx={{fontSize: "30px"}}
-              rows={createRows()}
-              columns={[{ field: 'title', headerName: "Zeit", width: "320" }, { field: 'case', headerName: 'Aktenzeichen', width: "320" }, { field: 'type', headerName: 'Typ', width: "320" }, { field: 'procedure', headerName: 'Verfahren', width: "320" }, { field: 'info', headerName: 'Info', width: "320", renderCell: (params) => {return <StyledCell>{params.value}</StyledCell>;}}]}
-            /> :
+            {(dates.length > 0) ?
+            dates.map((row) => {
+              return (
+                <Card key={row.id} sx={{width:"700px"}}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h1" component="div">
+                      {row.title}
+                    </Typography>
+                    <Typography variant="h2" color="text.secondary">
+                      {row.case}
+                    </Typography>
+                    <Typography variant="h2" color="text.secondary">
+                      {row.type}
+                    </Typography>
+                    <Typography variant="h2" color="text.secondary">
+                      {row.procedure}
+                    </Typography>
+                    <Typography variant="h2" color="red">
+                      {row.info}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              )})   
+            :
             <Typography> Heute finden keine Termine statt. </Typography>
             }
           </>

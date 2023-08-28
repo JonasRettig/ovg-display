@@ -23,7 +23,7 @@ import {
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Weather({weather, warnings, theme}) {
+export default function Weather({weather, warnings, setWeatherWarningsExist, theme}) {
     // the state that contains the forecast if it exists
     // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
@@ -96,7 +96,7 @@ export default function Weather({weather, warnings, theme}) {
             forecast.map((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Stack key={item.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
                         <Typography variant="h2"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
                             {returnIcon(item.weather[0].icon)}  
                             <Typography variant="h2"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
@@ -136,6 +136,11 @@ export default function Weather({weather, warnings, theme}) {
                 }
         }
         )}
+        if(warningsToAdd.length > 0){ 
+            setWeatherWarningsExist(true)
+        } else {
+            setWeatherWarningsExist(false)
+        }
         setRelevantWarnings(warningsToAdd)
     }
 
@@ -152,8 +157,8 @@ export default function Weather({weather, warnings, theme}) {
         <Stack direction="column" margin={3}>
         {weather.current ?
         <Stack direction="column" spacing={2}>
-        <Stack direction={"row"} spacing={5}>
-            <Stack key={weather.current.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+        <Stack direction={"row"} justifyContent={"space-evenly"} spacing={5}>
+            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
                 <Typography variant="h2"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
                 <Typography variant="h2"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>

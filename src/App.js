@@ -28,7 +28,7 @@ export default function Home() {
   // Reload the page every 30 minutes
   // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
-    setBreakingNews([])
+    setBreakingNews({})
     setNews({})
     setWeather({})
     setWarnings({})
@@ -48,7 +48,7 @@ export default function Home() {
   // these states hold the site content
   const [news, setNews] = useState({})
   const [newsCards, setNewsCards] = useState([])
-  const [breakingNews, setBreakingNews] = useState([])
+  const [breakingNews, setBreakingNews] = useState({})
   const [weather, setWeather] = useState({})
   const [warnings, setWarnings] = useState({})
   const [dates, setDates] = useState({})
@@ -57,10 +57,18 @@ export default function Home() {
   const [rssEnabled, setRssEnabled] = useState(false)
   const [newsEnabled, setNewsEnabled] = useState(false)
   const [weatherEnabled, setWeatherEnabled] = useState(false)
+  const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
+  // these states provide the size of the components. They are provided in [width, height]
+  const [datesSize, setDatesSize] = useState(1)
+  const [newsSize, setNewsSize] = useState([1,1])
+  const [newsImageSize, setNewsImageSize] = useState([1,1])
+  const [imageInCardDirection, setImageInCardDirection] = useState("column")
+  const [pageSplit, setPageSplit] = useState([63, 33])
+  const [newsDirection, setNewsDirection] = useState("column")
 
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
@@ -88,46 +96,16 @@ export default function Home() {
       fetchWeather();
       fetchWarnings();
     }
-  }, []);
-
-  useEffect(() => {
-    buildNewsCards()
-    if(rssEnabled) {
-      rssFetcher()
-    }
-    if(newsEnabled) {
-      fetchNews();
-    }
-    if(weatherEnabled) {
-      fetchWeather();
-      fetchWarnings();
-    }
-  }, [refetch]);
-
-  useEffect(() => {
-    if(rssEnabled) {
-      rssFetcher()
-    }
-  }, [rssEnabled]);
-
-  useEffect(() => {
-    buildNewsCards()
-    if(newsEnabled) {
-      fetchNews();
-    }
-  }, [newsEnabled]);
-
-  useEffect(() => {
-    if(weatherEnabled) {
-      fetchWeather();
-      fetchWarnings();
-    }
-  }, [weatherEnabled]);
+  }, [refetch, rssEnabled, newsEnabled, weatherEnabled]);
 
   // if the news are fetched we build new news cards
   useEffect(() => {
     buildNewsCards()
   }, [news]);
+
+  useEffect(() => {
+    determineLayout()
+  }, [news, breakingNews, weather, warnings, dates, refetch]);
 
   // the use effect that automatically switches the news card every 15 seconds
   // it is dependent on the news cards length so that it does not switch to a card that doesnt exist
@@ -181,6 +159,46 @@ async function fetchWarnings() {
     );
 }
 
+// this function determines the layout of the site
+// it is called every time the content of the site changes
+function determineLayout() {
+  //4k resolution is 3840 × 2160 
+  //if there are both weather warnings and breaking news
+  if(weatherWarningsExist && breakingNews.description) {
+    setDatesSize(1)
+    setNewsSize([1600, 1100])
+    setNewsImageSize([1, 450])
+    setPageSplit([53, 43])
+    setNewsDirection("row")
+    setImageInCardDirection("column")
+  } 
+  //if there are only weather warnings
+  else if(weatherWarningsExist) {
+    setDatesSize(1000)
+    setNewsSize([2000, 1])
+    setNewsImageSize([1, 600])
+    setPageSplit([53, 43])    
+    setImageInCardDirection("column")
+  }
+  //if there are only breaking news
+  else if(breakingNews.description) {
+    setDatesSize(1)
+    setNewsSize([2600, 2600])
+    setNewsImageSize([500, 1000])
+    setPageSplit([63, 33])
+    setNewsDirection("column")
+    setImageInCardDirection("row")
+  }
+  //if nothing special happens
+  else {
+    setDatesSize(1000)
+    setNewsSize([2500, 1])
+    setNewsImageSize([1, 800])
+    setPageSplit([63, 33])
+    setImageInCardDirection("column")
+  }
+}
+
 // the function that builds the news cards
 async function buildNewsCards() {
   var newsCardsToAdd = []
@@ -192,8 +210,8 @@ async function buildNewsCards() {
           if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") { 
           newsCardsToAdd.push({
             // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
-            image: report.teaserImage.imageVariants["16x9-1920"],
-            title: report.title,
+            image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
+            title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
             text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
           }
           )} else if (report.breakingNews) {
@@ -216,20 +234,10 @@ async function buildNewsCards() {
 
 // breaking news are built as their own card
 function handleBreakingNews(report) {
-  setBreakingNews(
-    // this card has a red background, is not forced to have an image and has EIL +++ added to the title
-    // this card is always displayed as long as it exists and doesn't cycle
-    <Card style={{ backgroundColor: 'red' }} sx={{width:"3000px"}}>
-      <CardContent>
-        <Typography gutterBottom variant="h1" component="div">
-          EIL +++ {report.title}
-        </Typography>
-        <Typography variant="h2" color="text.secondary">
-          {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
-        </Typography>
-      </CardContent>
-    </Card>
-  )
+  setBreakingNews({
+    title: report.title,
+    description: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
+  })
 }
 
 // the ress fetched from the OVG display
@@ -297,12 +305,14 @@ return (
     refetch={refetch}
   />
   <Box
-    height = "66vh"
+    height = {pageSplit[0] + "vh"}
     sx={{overflow: "hidden"}}
   >
     <Stack
+      marginTop="50px"
       direction="row"
       justifyContent="space-evenly"
+      alignContent={"center"}
     >
         <Stack
           direction="column"
@@ -314,21 +324,18 @@ return (
             {(dates.length > 0) ?
             dates.map((row) => {
               return (
-                <Card key={row.id} sx={{width:"700px"}}>
+                <Card key={row.id} sx={{width:datesSize}}>
                   <CardContent>
-                    <Typography gutterBottom variant="h1" component="div">
+                    <Typography gutterBottom variant="h2" component="div">
                       {row.title}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
+                    <Typography variant="h3" color="text.secondary">
                       {row.case}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
-                      {row.type}
+                    <Typography variant="h3" color="text.secondary">
+                      {row.type}, {row.procedure}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
-                      {row.procedure}
-                    </Typography>
-                    <Typography variant="h2" color="red">
+                    <Typography variant="h3" color="red">
                       {row.info}
                     </Typography>
                   </CardContent>
@@ -342,21 +349,34 @@ return (
         </Stack>
         <NRWDivider direction={"row"}/>
         <Stack 
-          direction={"column"}
+          direction={newsDirection}
           spacing={2}
         >
-          {breakingNews}
+          {breakingNews.title &&
+              <Card style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
+              <CardContent>
+                <Typography gutterBottom variant="h1" component="div">
+                  EIL +++ {breakingNews.title}
+                </Typography>
+                <Typography variant="h2" color="text.secondary">
+                  {breakingNews.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          }
           {newsCards[index] &&
           <Card
-            sx={{width:"3000px"}}
+            sx={{width:newsSize[0], height:newsSize[1]}}
           >
+            <Stack direction={imageInCardDirection}>
               <CardMedia
                 component="img"
-                image={newsCards[index].image}
-                height="960px"
-                width="2500px"
-                style={{ objectFit: 'contain' }}
-              />
+                image={newsCards[index].image[imageInCardDirection === 'column' ? 0 : 1]}
+                height={newsImageSize[1]}
+                width={newsImageSize[0]}
+                style={{
+                  ...(imageInCardDirection === 'column' && { objectFit: 'contain' })
+                }}              />
               <CardContent>
                 <Typography gutterBottom variant="h1" component="div">
                   {newsCards[index].title}
@@ -365,6 +385,7 @@ return (
                   {newsCards[index].text}
                 </Typography>
               </CardContent>
+              </Stack>
             </Card>
           }
         </Stack>
@@ -372,13 +393,13 @@ return (
         </Box>
         <NRWDivider direction={"column"}/>
         <Box
-          height="33vh"
+          height={pageSplit[1] + "vh"}
           display="flex"
           justifyContent="center"
           alignContent="center"
           alignItems="center"
         >
-          <Weather weather={weather} warnings={warnings} theme={currentTheme}/>
+          <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} theme={currentTheme}/>
         </Box>
   </ThemeProvider>
 )

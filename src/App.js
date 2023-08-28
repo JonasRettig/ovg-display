@@ -3,7 +3,7 @@
 
 //! TODOS:
 // - [x] Change dates display
-// - [x] Test how weather warning are displayed
+// - [x] Build system that autoamtically aranges stuff properly if certain elements are rendered
 
 import React from "react";
 import { useState, useEffect } from "react";

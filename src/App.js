@@ -28,7 +28,7 @@ export default function Home() {
   // Reload the page every 30 minutes
   // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
-    setBreakingNews([])
+    setBreakingNews({})
     setNews({})
     setWeather({})
     setWarnings({})
@@ -48,7 +48,7 @@ export default function Home() {
   // these states hold the site content
   const [news, setNews] = useState({})
   const [newsCards, setNewsCards] = useState([])
-  const [breakingNews, setBreakingNews] = useState([])
+  const [breakingNews, setBreakingNews] = useState({})
   const [weather, setWeather] = useState({})
   const [warnings, setWarnings] = useState({})
   const [dates, setDates] = useState({})
@@ -66,6 +66,9 @@ export default function Home() {
   const [datesSize, setDatesSize] = useState(1)
   const [newsSize, setNewsSize] = useState([1,1])
   const [newsImageSize, setNewsImageSize] = useState([1,1])
+  const [imageInCardDirection, setImageInCardDirection] = useState("column")
+  const [pageSplit, setPageSplit] = useState([63, 33])
+  const [newsDirection, setNewsDirection] = useState("column")
 
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
@@ -161,28 +164,38 @@ async function fetchWarnings() {
 function determineLayout() {
   //4k resolution is 3840 × 2160 
   //if there are both weather warnings and breaking news
-  if(weatherWarningsExist && breakingNews.length > 0) {
+  if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([3000, 1])
-    setNewsImageSize([1, 1000])
+    setNewsSize([1600, 1100])
+    setNewsImageSize([1, 450])
+    setPageSplit([53, 43])
+    setNewsDirection("row")
+    setImageInCardDirection("column")
   } 
   //if there are only weather warnings
   else if(weatherWarningsExist) {
-    setDatesSize(1)
-    setNewsSize([1, 1])
-    setNewsImageSize([1, 1000])
+    setDatesSize(1000)
+    setNewsSize([2000, 1])
+    setNewsImageSize([1, 600])
+    setPageSplit([53, 43])    
+    setImageInCardDirection("column")
   }
   //if there are only breaking news
-  else if(breakingNews.length > 0) {
+  else if(breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([3000, 1])
-    setNewsImageSize([1, 1000])
+    setNewsSize([2600, 2600])
+    setNewsImageSize([500, 1000])
+    setPageSplit([63, 33])
+    setNewsDirection("column")
+    setImageInCardDirection("row")
   }
   //if nothing special happens
   else {
     setDatesSize(1000)
     setNewsSize([2500, 1])
     setNewsImageSize([1, 800])
+    setPageSplit([63, 33])
+    setImageInCardDirection("column")
   }
 }
 
@@ -197,8 +210,8 @@ async function buildNewsCards() {
           if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") { 
           newsCardsToAdd.push({
             // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
-            image: report.teaserImage.imageVariants["16x9-1920"],
-            title: report.title,
+            image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
+            title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
             text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
           }
           )} else if (report.breakingNews) {
@@ -221,20 +234,10 @@ async function buildNewsCards() {
 
 // breaking news are built as their own card
 function handleBreakingNews(report) {
-  setBreakingNews(
-    // this card has a red background, is not forced to have an image and has EIL +++ added to the title
-    // this card is always displayed as long as it exists and doesn't cycle
-    <Card style={{ backgroundColor: 'red' }} sx={{width:"3000px"}}>
-      <CardContent>
-        <Typography gutterBottom variant="h1" component="div">
-          EIL +++ {report.title}
-        </Typography>
-        <Typography variant="h2" color="text.secondary">
-          {Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')}
-        </Typography>
-      </CardContent>
-    </Card>
-  )
+  setBreakingNews({
+    title: report.title,
+    description: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
+  })
 }
 
 // the ress fetched from the OVG display
@@ -302,7 +305,7 @@ return (
     refetch={refetch}
   />
   <Box
-    height = "63vh"
+    height = {pageSplit[0] + "vh"}
     sx={{overflow: "hidden"}}
   >
     <Stack
@@ -323,19 +326,16 @@ return (
               return (
                 <Card key={row.id} sx={{width:datesSize}}>
                   <CardContent>
-                    <Typography gutterBottom variant="h1" component="div">
+                    <Typography gutterBottom variant="h2" component="div">
                       {row.title}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
+                    <Typography variant="h3" color="text.secondary">
                       {row.case}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
-                      {row.type}
+                    <Typography variant="h3" color="text.secondary">
+                      {row.type}, {row.procedure}
                     </Typography>
-                    <Typography variant="h2" color="text.secondary">
-                      {row.procedure}
-                    </Typography>
-                    <Typography variant="h2" color="red">
+                    <Typography variant="h3" color="red">
                       {row.info}
                     </Typography>
                   </CardContent>
@@ -349,21 +349,34 @@ return (
         </Stack>
         <NRWDivider direction={"row"}/>
         <Stack 
-          direction={"column"}
+          direction={newsDirection}
           spacing={2}
         >
-          {breakingNews}
+          {breakingNews.title &&
+              <Card style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
+              <CardContent>
+                <Typography gutterBottom variant="h1" component="div">
+                  EIL +++ {breakingNews.title}
+                </Typography>
+                <Typography variant="h2" color="text.secondary">
+                  {breakingNews.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          }
           {newsCards[index] &&
           <Card
             sx={{width:newsSize[0], height:newsSize[1]}}
           >
+            <Stack direction={imageInCardDirection}>
               <CardMedia
                 component="img"
-                image={newsCards[index].image}
+                image={newsCards[index].image[imageInCardDirection === 'column' ? 0 : 1]}
                 height={newsImageSize[1]}
                 width={newsImageSize[0]}
-                style={{ objectFit: 'contain' }}
-              />
+                style={{
+                  ...(imageInCardDirection === 'column' && { objectFit: 'contain' })
+                }}              />
               <CardContent>
                 <Typography gutterBottom variant="h1" component="div">
                   {newsCards[index].title}
@@ -372,6 +385,7 @@ return (
                   {newsCards[index].text}
                 </Typography>
               </CardContent>
+              </Stack>
             </Card>
           }
         </Stack>
@@ -379,7 +393,7 @@ return (
         </Box>
         <NRWDivider direction={"column"}/>
         <Box
-          height="33vh"
+          height={pageSplit[1] + "vh"}
           display="flex"
           justifyContent="center"
           alignContent="center"

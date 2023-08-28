@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import {
     Typography,
     Stack,
+    Card,
+    CardContent
   } from "@mui/material";
 import { ThemeProvider } from '@mui/material/styles';
 import {
@@ -106,7 +108,7 @@ export default function Weather({weather, theme}) {
         <Stack direction="column" margin={2}>
         {weather.current ?
         <Stack direction="column" spacing={2}>
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={5}>
             <Stack key={weather.current.dt} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                 <Typography variant="h2"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
@@ -117,15 +119,17 @@ export default function Weather({weather, theme}) {
             })}
         </Stack>
         {weather.alerts &&
-        <Stack>
-            <Typography variant="h1"> Warnungen </Typography>
+        <Stack direction={"row"} spacing={1}>
             {weather.alerts.map((item) => {
                 return (
+                    <Card>
+                    <CardContent style={{ backgroundColor: 'red' }}>
                     <Stack key={item.start} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography variant="h2"> {item.event} </Typography>
-                        <Typography variant="h2"> {item.description} </Typography>
-                        <Typography variant="h2"> {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h1"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h3"> {item.description} </Typography>
                     </Stack>
+                    </CardContent>
+                    </Card>
                 )
             })}
         </Stack>}

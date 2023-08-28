@@ -213,12 +213,6 @@ function handleBreakingNews(report) {
     // this card is always displayed as long as it exists and doesn't cycle
     <Card style={{ backgroundColor: 'red' }} sx={{width:"3000px"}}>
       <CardContent>
-        {report.teaserImage &&
-        <CardMedia
-          component="img"
-          image={report.teaserImage.imageVariants["16x9-1920"]}
-        />
-        }
         <Typography gutterBottom variant="h1" component="div">
           EIL +++ {report.title}
         </Typography>

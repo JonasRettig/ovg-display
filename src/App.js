@@ -37,6 +37,7 @@ export default function Home() {
     setBreakingNews([])
     setNews({})
     setWeather({})
+    setWarnings({})
     setDates({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
@@ -44,7 +45,8 @@ export default function Home() {
   // all relevant fetch URLs
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
-  const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely,alerts&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
+  const warningsURL = "https://s3.eu-central-1.amazonaws.com/app-prod-static.warnwetter.de/v16/warnings_nowcast.json"
   // the cors proxy url that is needed to fetch the rss feed
   // the proxy is deployed on cloudflare with this script https://github.com/Zibri/cloudflare-cors-anywhere
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
@@ -54,6 +56,7 @@ export default function Home() {
   const [newsCards, setNewsCards] = useState([])
   const [breakingNews, setBreakingNews] = useState([])
   const [weather, setWeather] = useState({})
+  const [warnings, setWarnings] = useState({})
   const [dates, setDates] = useState({})
   // these states are necessary for the site to work properly
   const [index, setIndex] = useState(0)
@@ -95,6 +98,7 @@ export default function Home() {
     }
     if(weatherEnabled) {
       fetchWeather();
+      fetchWarnings();
     }
   }, []);
 
@@ -108,6 +112,7 @@ export default function Home() {
     }
     if(weatherEnabled) {
       fetchWeather();
+      fetchWarnings();
     }
   }, [refetch]);
 
@@ -127,6 +132,7 @@ export default function Home() {
   useEffect(() => {
     if(weatherEnabled) {
       fetchWeather();
+      fetchWarnings();
     }
   }, [weatherEnabled]);
 
@@ -166,6 +172,20 @@ async function fetchWeather() {
     .then(  
       (result) => {
         setWeather(result)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+}
+
+// the function that fetches current weather warnings from the dwd
+async function fetchWarnings() {
+  fetch(warningsURL, { method: "GET" })
+    .then((res) => res.json())
+    .then(  
+      (result) => {
+        setWarnings(result)
       },
       (error) => {
         console.log(error);
@@ -355,7 +375,7 @@ return (
           alignContent="center"
           alignItems="center"
         >
-          <Weather weather={weather} theme={currentTheme} currentThemeName={currentThemeName}/>
+          <Weather weather={weather} warnings={warnings} theme={currentTheme}/>
         </Box>
   </ThemeProvider>
 )

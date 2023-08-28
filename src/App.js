@@ -24,18 +24,6 @@ import NRWDivider from "./Components/nrwDivider";
 </html>
 
 export default function Home() {
-
-  // Reload the page every 30 minutes
-  // all relevant states are reset and the refetch is triggered by inverting the refresh variable
-  setInterval(function() {
-    setBreakingNews({})
-    setNews({})
-    setWeather({})
-    setWarnings({})
-    setDates({})
-    setRefetch(!refetch)
-  }, 30 * 60 * 1000);
-
   // all relevant fetch URLs
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
@@ -69,6 +57,17 @@ export default function Home() {
   const [imageInCardDirection, setImageInCardDirection] = useState("column")
   const [pageSplit, setPageSplit] = useState([63, 33])
   const [newsDirection, setNewsDirection] = useState("column")
+
+  // Reload the page every 30 minutes
+  // all relevant states are reset and the refetch is triggered by inverting the refresh variable
+  setInterval(function() {
+    setBreakingNews({})
+    setNews({})
+    setWeather({})
+    setWarnings({})
+    setDates({})
+    setRefetch(!refetch)
+  }, 30 * 60 * 1000);
 
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {

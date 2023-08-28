@@ -319,7 +319,7 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography variant="h1"> Termine </Typography>
+          <Typography paddingLeft={"20px"} variant="h1"> Termine </Typography>
             {(dates.length > 0) ?
             dates.map((row) => {
               return (
@@ -341,7 +341,7 @@ return (
                 </Card>
               )})   
             :
-            <Typography> Heute finden keine Termine statt. </Typography>
+            <Typography paddingLeft={"20px"} variant="h1"> Heute finden keine Termine statt. </Typography>
             }
           </>
           }

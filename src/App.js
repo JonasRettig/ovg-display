@@ -255,26 +255,26 @@ function determineLayout() {
   //if there are both weather warnings and breaking news
   if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([480, 330])
-    setNewsImageSize([1, 135])
-    setPageSplit([53, 43])
+    setNewsSize([900, 450])
+    setNewsImageSize([1, 250])
+    setPageSplit([52, 40])
     setNewsDirection("row")
     setImageInCardDirection("column")
   } 
   //if there are only weather warnings
   else if(weatherWarningsExist) {
     setDatesSize(300)
-    setNewsSize([750, 1])
-    setNewsImageSize([1, 180])
-    setPageSplit([53, 43])    
+    setNewsSize([1200, 1])
+    setNewsImageSize([1, 300])
+    setPageSplit([52, 40])    
     setImageInCardDirection("column")
   }
   //if there are only breaking news
   else if(breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([780, 780])
-    setNewsImageSize([150, 300])
-    setPageSplit([63, 33])
+    setNewsSize([1200, 1200])
+    setNewsImageSize([400, 400])
+    setPageSplit([62, 30])
     setNewsDirection("column")
     setImageInCardDirection("row")
   }
@@ -283,7 +283,7 @@ function determineLayout() {
     setDatesSize(300)
     setNewsSize([750, 1])
     setNewsImageSize([1, 240])
-    setPageSplit([63, 33])
+    setPageSplit([62, 30])
     setImageInCardDirection("column")
   }
 }
@@ -412,22 +412,22 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography paddingLeft={"20px"} variant="h3"> Termine </Typography>
+          <Typography paddingLeft={"20px"} variant="h4"> Termine </Typography>
             {(dates.length > 0) ?
             dates.map((row) => {
               return (
                 <Card key={row.id} sx={{width:datesSize}}>
                   <CardContent>
-                    <Typography gutterBottom variant="h4" component="div">
+                    <Typography gutterBottom variant="h5" component="div">
                       {row.title}
                     </Typography>
-                    <Typography variant="h5" color="text.secondary">
+                    <Typography variant="h6" color="text.secondary">
                       {row.case}
                     </Typography>
-                    <Typography variant="h5" color="text.secondary">
+                    <Typography variant="h6" color="text.secondary">
                       {row.type}, {row.procedure}
                     </Typography>
-                    <Typography variant="h5" color="red">
+                    <Typography variant="h6" color="red">
                       {row.info}
                     </Typography>
                   </CardContent>

@@ -192,8 +192,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
                     <Card>
                     <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
                     <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography variant="h3"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
-                        <Typography variant="h4"> {item.description} </Typography>
+                        <Typography variant="h4"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h5"> {item.description} </Typography>
                     </Stack>
                     </CardContent>
                     </Card>

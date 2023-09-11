@@ -276,7 +276,6 @@ function determineLayout() {
   }
   //if nothing special happens
   else {
-    console.log("normal")
     setDatesSize(1000)
     setNewsSize([2500, 1])
     setNewsImageSize([1, 800])

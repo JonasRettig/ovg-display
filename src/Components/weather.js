@@ -19,7 +19,9 @@ import {
     WiSnow,
     WiDayFog,
     WiNightFog,
-    WiNightAltRain
+    WiNightAltRain,
+    WiNightClear,
+    WiNightAltCloudy
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
@@ -36,19 +38,22 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     // use effect that builds the forecast if the weather state changes
     useEffect(() => {
         buildForecast(weather.hourly)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [weather])
 
     useEffect(() => {
         parseWarnings(warnings)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [warnings])
 
     useEffect(() => {
-        if(relevantWarnings.length > 0){
-            setWeatherWarningsExist(true)
-        } else {
-            setWeatherWarningsExist(false)
-        }
-    }, [relevantWarnings])
+      if (relevantWarnings.length > 0) {
+        setWeatherWarningsExist(true);
+      } else {
+        setWeatherWarningsExist(false);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [relevantWarnings]);
 
     // function that returns the correct icon for the weather
     // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
@@ -56,8 +61,12 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     function returnIcon(iconID) {
         if(iconID === "01d") {
             return <WiDaySunny size={iconSize}/>
+        } else if(iconID === "01n") {
+            return <WiNightClear size={iconSize}/>
         } else if(iconID === "02d") {
             return <WiDayCloudy size={iconSize}/>
+        } else if(iconID === "02n") {
+            return <WiNightAltCloudy size={iconSize}/>
         } else if(iconID === "03d" || iconID === "03n") {
             return <WiCloud size={iconSize}/>
         } else if(iconID === "04d" || iconID === "04n") {
@@ -81,6 +90,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         }
     }
 
+    // function that matches the warning level to a color
+    // the color is take from the dwd website
     function matchWarningColor(level) {
         if(level === 1) {
             return "#ffeb3b"
@@ -102,7 +113,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             var forecastBuilder = [];
             // gets the next 5h by slicing an array sorted by the time stamp
             const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
-            forecast.map((item) => {
+            forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
@@ -133,12 +144,14 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         return formattedTime;
       };
 
+    // function that parses the warnings and checks if they are relevant
+    // the check is done with polygon coordinates
     function parseWarnings(warnings){
         var pointInPolygon = require('point-in-polygon')
         const msCoords = [51.9607, 7.6261]
         const warningsToAdd = []
         if(warnings !== undefined && Object.keys(warnings).length !== 0){
-            warnings.warnings.map((warning) => {
+            warnings.warnings.forEach((warning) => {
                 const area = convertPolygons(warning.regions[0].polygon)
                 if(pointInPolygon(msCoords, area)) {
                     warningsToAdd.push(warning)
@@ -148,6 +161,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         setRelevantWarnings(warningsToAdd)
     }
 
+    // helper function that converts the list of polygon coordinates to an array of arrays
     function convertPolygons(polygons){
         const newArray = [];
         for (let i = 0; i < polygons.length; i += 2) {

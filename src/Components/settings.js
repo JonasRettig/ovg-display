@@ -1,7 +1,7 @@
 // a component that defines a small settings window for the site
 // not really needed for the final production, built this so i can easily showcase light and dark theme
 // and to disable the fetches for the weather and the news so I don't get rate limited while developing
-import {React, useEffect, useState} from 'react';
+import {React, useState} from 'react';
 import { 
     Dialog, 
     DialogContent, 
@@ -45,8 +45,11 @@ export default function Settings({
     const [showSettings, setShowSettings] = useState(false);
     const [startOpacity, setStartOpacity] = useState(0)
 
+    // size of the icons in the settings window
     const iconSize = 70;
 
+    // function that handles the demo mode change
+    // if the demo mode is switched off all the mock data is cleared
     function handleDemoChange(event){
         setDemoMode(event)
         if(event === "off"){

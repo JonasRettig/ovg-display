@@ -154,7 +154,7 @@ export default function Home() {
           },
         ]
       }
-      setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
+      setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
       setNewsCards([{
           image: ["https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBxrfI/16x9-1920.jpg", "https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBx1ms/1x1-840.jpg"],
           title: "Dies ist eine Demo Nachricht",
@@ -255,8 +255,8 @@ function determineLayout() {
   //if there are both weather warnings and breaking news
   if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([900, 450])
-    setNewsImageSize([1, 250])
+    setNewsSize([800, 450])
+    setNewsImageSize([1, 225])
     setPageSplit([52, 40])
     setNewsDirection("row")
     setImageInCardDirection("column")
@@ -265,7 +265,7 @@ function determineLayout() {
   else if(weatherWarningsExist) {
     setDatesSize(300)
     setNewsSize([1200, 1])
-    setNewsImageSize([1, 300])
+    setNewsImageSize([1, 250])
     setPageSplit([52, 40])    
     setImageInCardDirection("column")
   }
@@ -414,25 +414,78 @@ return (
           <>
           <Typography paddingLeft={"20px"} variant="h4"> Termine </Typography>
             {(dates.length > 0) ?
-            dates.map((row) => {
-              return (
-                <Card key={row.id} sx={{width:datesSize}}>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {row.title}
-                    </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                      {row.case}
-                    </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                      {row.type}, {row.procedure}
-                    </Typography>
-                    <Typography variant="h6" color="red">
-                      {row.info}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              )})   
+              dates.length <= 3 ?
+                dates.map((row) => {
+                  return (
+                    <Card key={row.id} sx={{width:datesSize}}>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {row.title}
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary">
+                          {row.case}
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary">
+                          {row.type}, {row.procedure}
+                        </Typography>
+                        <Typography variant="h6" color="red">
+                          {row.info}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+              )}) : 
+              dates.map((row, index) => {
+                if(index % 2 === 0) {
+                  if(dates[index + 1]) {
+                    return(
+                      <Stack direction={"row"} spacing={1}>
+                        <Card key={row.id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {row.title} {row.case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {row.type}, {row.procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {row.info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                        <Card key={dates[index + 1].id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {dates[index + 1].title}  {dates[index + 1].case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {dates[index + 1].type}, {dates[index + 1].procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {dates[index + 1].info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Stack>
+                    )
+                  }
+                  else {
+                    return(
+                        <Card key={row.id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {row.title} {row.case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {row.type}, {row.procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {row.info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      )
+                    }
+              }}) 
             :
             <Typography paddingLeft={"20px"} variant="h3"> Heute finden keine Termine statt. </Typography>
             }

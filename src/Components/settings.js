@@ -45,8 +45,11 @@ export default function Settings({
     const [showSettings, setShowSettings] = useState(false);
     const [startOpacity, setStartOpacity] = useState(0)
 
+    // size of the icons in the settings window
     const iconSize = 70;
 
+    // function that handles the demo mode change
+    // if the demo mode is switched off all the mock data is cleared
     function handleDemoChange(event){
         setDemoMode(event)
         if(event === "off"){

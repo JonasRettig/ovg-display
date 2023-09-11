@@ -96,6 +96,7 @@ export default function Home() {
       fetchWeather();
       fetchWarnings();
     }
+    //fills the states with mock data if the demo mode is on
     if(demoMode !== "off") {
       const breakingNews = {
         title: "Dies ist eine Demo Eilmeldung",
@@ -372,7 +373,6 @@ function createRows(result) {
   setDates(finalRows)
 }
 
-// ! Styling could eventually be done with pixel numbers as its only going to be deployed on 4k screens
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />

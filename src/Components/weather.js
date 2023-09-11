@@ -84,6 +84,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         }
     }
 
+    // function that matches the warning level to a color
+    // the color is take from the dwd website
     function matchWarningColor(level) {
         if(level === 1) {
             return "#ffeb3b"
@@ -136,6 +138,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         return formattedTime;
       };
 
+    // function that parses the warnings and checks if they are relevant
+    // the check is done with polygon coordinates
     function parseWarnings(warnings){
         var pointInPolygon = require('point-in-polygon')
         const msCoords = [51.9607, 7.6261]
@@ -151,6 +155,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         setRelevantWarnings(warningsToAdd)
     }
 
+    // helper function that converts the list of polygon coordinates to an array of arrays
     function convertPolygons(polygons){
         const newArray = [];
         for (let i = 0; i < polygons.length; i += 2) {

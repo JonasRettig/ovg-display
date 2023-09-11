@@ -255,34 +255,34 @@ function determineLayout() {
   //if there are both weather warnings and breaking news
   if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([1600, 1100])
-    setNewsImageSize([1, 450])
+    setNewsSize([480, 330])
+    setNewsImageSize([1, 135])
     setPageSplit([53, 43])
     setNewsDirection("row")
     setImageInCardDirection("column")
   } 
   //if there are only weather warnings
   else if(weatherWarningsExist) {
-    setDatesSize(1000)
-    setNewsSize([2500, 1])
-    setNewsImageSize([1, 600])
+    setDatesSize(300)
+    setNewsSize([750, 1])
+    setNewsImageSize([1, 180])
     setPageSplit([53, 43])    
     setImageInCardDirection("column")
   }
   //if there are only breaking news
   else if(breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([2600, 2600])
-    setNewsImageSize([500, 1000])
+    setNewsSize([780, 780])
+    setNewsImageSize([150, 300])
     setPageSplit([63, 33])
     setNewsDirection("column")
     setImageInCardDirection("row")
   }
   //if nothing special happens
   else {
-    setDatesSize(1000)
-    setNewsSize([2500, 1])
-    setNewsImageSize([1, 800])
+    setDatesSize(300)
+    setNewsSize([750, 1])
+    setNewsImageSize([1, 240])
     setPageSplit([63, 33])
     setImageInCardDirection("column")
   }
@@ -348,9 +348,11 @@ function rssFetcher() {
 // function that creates the rows for the data grid
 // for the data from the rss feed
 function createRows(result) {
+  if(!result.rss.channel[0].item) return
   var rows = []
   var id = 0
   // every row gets a unique id
+  console.log(result)
   result.rss.channel[0].item.forEach((row) => {
     row["id"] = id
     id++
@@ -410,29 +412,29 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography paddingLeft={"20px"} variant="h1"> Termine </Typography>
+          <Typography paddingLeft={"20px"} variant="h3"> Termine </Typography>
             {(dates.length > 0) ?
             dates.map((row) => {
               return (
                 <Card key={row.id} sx={{width:datesSize}}>
                   <CardContent>
-                    <Typography gutterBottom variant="h2" component="div">
+                    <Typography gutterBottom variant="h4" component="div">
                       {row.title}
                     </Typography>
-                    <Typography variant="h3" color="text.secondary">
+                    <Typography variant="h5" color="text.secondary">
                       {row.case}
                     </Typography>
-                    <Typography variant="h3" color="text.secondary">
+                    <Typography variant="h5" color="text.secondary">
                       {row.type}, {row.procedure}
                     </Typography>
-                    <Typography variant="h3" color="red">
+                    <Typography variant="h5" color="red">
                       {row.info}
                     </Typography>
                   </CardContent>
                 </Card>
               )})   
             :
-            <Typography paddingLeft={"20px"} variant="h1"> Heute finden keine Termine statt. </Typography>
+            <Typography paddingLeft={"20px"} variant="h3"> Heute finden keine Termine statt. </Typography>
             }
           </>
           }
@@ -445,10 +447,10 @@ return (
           {breakingNews.title &&
               <Card style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
               <CardContent>
-                <Typography gutterBottom variant="h1" component="div">
+                <Typography gutterBottom variant="h4" component="div">
                   EIL +++ {breakingNews.title}
                 </Typography>
-                <Typography variant="h2" color="text.secondary">
+                <Typography variant="h5" color="text.secondary">
                   {breakingNews.description}
                 </Typography>
               </CardContent>
@@ -469,10 +471,10 @@ return (
                 }}             
               />
               <CardContent>
-                <Typography gutterBottom variant="h1" component="div">
+                <Typography gutterBottom variant="h4" component="div">
                   {newsCards[index].title}
                 </Typography>
-                <Typography variant="h2" color="text.secondary">
+                <Typography variant="h5" color="text.secondary">
                   {newsCards[index].text}
                 </Typography>
               </CardContent>

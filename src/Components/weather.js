@@ -33,7 +33,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     const [relevantWarnings, setRelevantWarnings] = useState([]);
 
     //Size of all weather Icons
-    const iconSize = 266;
+    const iconSize = 80;
 
     // use effect that builds the forecast if the weather state changes
     useEffect(() => {
@@ -116,10 +116,10 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
-                        <Typography variant="h2"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
+                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >
+                        <Typography variant="h4"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
                             {returnIcon(item.weather[0].icon)}  
-                            <Typography variant="h2"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
+                            <Typography variant="h4"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
                     )
                 }
@@ -176,10 +176,10 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         {weather.current ?
         <Stack direction="column" spacing={2}>
         <Stack direction={"row"} justifyContent={"space-evenly"} spacing={5}>
-            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
-                <Typography variant="h2"> Aktuell  </Typography>
+            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                <Typography variant="h4"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
-                <Typography variant="h2"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
+                <Typography variant="h4"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
             </Stack>
             {forecastRender.map((item) => {
                 return item;
@@ -192,8 +192,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
                     <Card>
                     <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
                     <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography variant="h1"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
-                        <Typography variant="h2"> {item.description} </Typography>
+                        <Typography variant="h3"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h4"> {item.description} </Typography>
                     </Stack>
                     </CardContent>
                     </Card>
@@ -202,7 +202,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         </Stack>}
         </Stack>
         :
-        <Typography variant="h1"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
+        <Typography variant="h3"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
         }
         </Stack>
         </ThemeProvider>

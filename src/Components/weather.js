@@ -19,7 +19,9 @@ import {
     WiSnow,
     WiDayFog,
     WiNightFog,
-    WiNightAltRain
+    WiNightAltRain,
+    WiNightClear,
+    WiNightAltCloudy
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
@@ -59,8 +61,12 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     function returnIcon(iconID) {
         if(iconID === "01d") {
             return <WiDaySunny size={iconSize}/>
+        } else if(iconID === "01n") {
+            return <WiNightClear size={iconSize}/>
         } else if(iconID === "02d") {
             return <WiDayCloudy size={iconSize}/>
+        } else if(iconID === "02n") {
+            return <WiNightAltCloudy size={iconSize}/>
         } else if(iconID === "03d" || iconID === "03n") {
             return <WiCloud size={iconSize}/>
         } else if(iconID === "04d" || iconID === "04n") {

@@ -190,7 +190,7 @@ export default function Home() {
 
   useEffect(() => {
     determineLayout()
-  }, [news, breakingNews, weather, warnings, dates, refetch]);
+  }, [news, breakingNews, weather, warnings, dates, refetch, weatherWarningsExist]);
 
   // the use effect that automatically switches the news card every 15 seconds
   // it is dependent on the news cards length so that it does not switch to a card that doesnt exist
@@ -276,6 +276,7 @@ function determineLayout() {
   }
   //if nothing special happens
   else {
+    console.log("normal")
     setDatesSize(1000)
     setNewsSize([2500, 1])
     setNewsImageSize([1, 800])
@@ -463,7 +464,8 @@ return (
                 width={newsImageSize[0]}
                 style={{
                   ...(imageInCardDirection === 'column' && { objectFit: 'contain' })
-                }}              />
+                }}             
+              />
               <CardContent>
                 <Typography gutterBottom variant="h1" component="div">
                   {newsCards[index].title}

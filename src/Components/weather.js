@@ -42,6 +42,14 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         parseWarnings(warnings)
     }, [warnings])
 
+    useEffect(() => {
+        if(relevantWarnings.length > 0){
+            setWeatherWarningsExist(true)
+        } else {
+            setWeatherWarningsExist(false)
+        }
+    }, [relevantWarnings])
+
     // function that returns the correct icon for the weather
     // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
     // ! NOT ALL CASES ARE COVERED
@@ -137,11 +145,6 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
                 }
         }
         )}
-        if(warningsToAdd.length > 0){ 
-            setWeatherWarningsExist(true)
-        } else {
-            setWeatherWarningsExist(false)
-        }
         setRelevantWarnings(warningsToAdd)
     }
 

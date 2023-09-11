@@ -150,7 +150,7 @@ export default function Home() {
             ],
             "description": "Dies ist eine Demo Warnung",
             "event": "Demo Warnung",
-          }
+          },
         ]
       }
       setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
@@ -260,7 +260,7 @@ function determineLayout() {
   //if there are only weather warnings
   else if(weatherWarningsExist) {
     setDatesSize(1000)
-    setNewsSize([2000, 1])
+    setNewsSize([2500, 1])
     setNewsImageSize([1, 600])
     setPageSplit([53, 43])    
     setImageInCardDirection("column")

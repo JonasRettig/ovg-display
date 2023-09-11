@@ -44,6 +44,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
 
     // function that returns the correct icon for the weather
     // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
+    // ! NOT ALL CASES ARE COVERED
     function returnIcon(iconID) {
         if(iconID === "01d") {
             return <WiDaySunny size={iconSize}/>

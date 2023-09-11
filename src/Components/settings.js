@@ -9,6 +9,9 @@ import {
     IconButton,
     Stack,
     Typography,
+    Select,
+    MenuItem,
+    FormControl,
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -32,6 +35,8 @@ export default function Settings({
     setNews,
     setBreakingNews,
     setWeather,
+    demoMode,
+    setDemoMode,
     setRefetch, 
     refetch
 }) {
@@ -64,7 +69,7 @@ export default function Settings({
             open={showSettings} 
             onClose={() => setShowSettings(false)}
             fullWidth={true}
-            maxWidth={"lg"}
+            maxWidth={"xl"}
         >
             <DialogTitle variant='h1' alignSelf={"center"}>Settings</DialogTitle>
             <DialogContent>
@@ -117,6 +122,21 @@ export default function Settings({
                         <IconButton onMouseDown={() => {setRefetch(!refetch); setBreakingNews([]); setNews([]); setDates({}); setWeather({})}}>
                             <CachedIcon sx={{fontSize: iconSize}}/>
                         </IconButton>
+                    </Stack>
+
+                    <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
+                        <Typography variant='h2' marginRight={"20px"}> Der Demo-Modus ist gerade </Typography>
+                        <FormControl sx={{ minWidth: 300}}>
+                            <Select
+                            value={demoMode}
+                            onChange={(e) => setDemoMode(e.target.value)}
+                            >
+                                <MenuItem value={"deaktivated"}> <Typography variant='h2'> <b>deaktiviert</b> </Typography></MenuItem>
+                                <MenuItem value={"breakingNews"}><Typography variant='h2'> <b>Breaking News</b> </Typography></MenuItem>
+                                <MenuItem value={"weatherWarning"}><Typography variant='h2'> <b>Wetter Warnings</b> </Typography></MenuItem>
+                                <MenuItem value={"chaos"}><Typography variant='h2'> <b>Chaos</b> </Typography></MenuItem>
+                            </Select>
+                        </FormControl>
                     </Stack>
 
                 </Stack>

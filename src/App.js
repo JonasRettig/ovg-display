@@ -17,6 +17,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Weather from "./Components/weather";
 import Settings from "./Components/settings";
 import NRWDivider from "./Components/nrwDivider";
+import invokeDemoMode from "./Components/demoMode";
 
 <html>
 <p>print env secret to HTML</p>
@@ -47,6 +48,7 @@ export default function Home() {
   const [weatherEnabled, setWeatherEnabled] = useState(false)
   const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
+  const [demoMode, setDemoMode] = useState("deaktiviert")
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
@@ -94,6 +96,9 @@ export default function Home() {
     if(weatherEnabled) {
       fetchWeather();
       fetchWarnings();
+    }
+    if(demoMode !== "deaktivated") {
+      invokeDemoMode({setBreakingNews, setNews, setWeather, setWarnings, setDates, demoMode})
     }
   }, [refetch, rssEnabled, newsEnabled, weatherEnabled]);
 
@@ -224,7 +229,7 @@ async function buildNewsCards() {
   // if there are no news we build a single card that informs useres that the fetch failed
   else {
     setNewsCards([{
-          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
+          image: ["https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"],
           title: "Laden der Nachrichten fehlgeschlagen",
           text: "Sollte das Problem bestehen bleiben wenden Sie sich bitte an den Administrator."
     }])
@@ -300,6 +305,8 @@ return (
     setNews={setNews}
     setWeather={setWeather}
     setDates={setDates}
+    demoMode={demoMode}
+    setDemoMode={setDemoMode}
     setRefetch={setRefetch}
     refetch={refetch}
   />

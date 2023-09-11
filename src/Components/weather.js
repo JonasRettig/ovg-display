@@ -36,19 +36,22 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     // use effect that builds the forecast if the weather state changes
     useEffect(() => {
         buildForecast(weather.hourly)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [weather])
 
     useEffect(() => {
         parseWarnings(warnings)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [warnings])
 
     useEffect(() => {
-        if(relevantWarnings.length > 0){
-            setWeatherWarningsExist(true)
-        } else {
-            setWeatherWarningsExist(false)
-        }
-    }, [relevantWarnings])
+      if (relevantWarnings.length > 0) {
+        setWeatherWarningsExist(true);
+      } else {
+        setWeatherWarningsExist(false);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [relevantWarnings]);
 
     // function that returns the correct icon for the weather
     // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
@@ -102,7 +105,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             var forecastBuilder = [];
             // gets the next 5h by slicing an array sorted by the time stamp
             const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
-            forecast.map((item) => {
+            forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
@@ -138,7 +141,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         const msCoords = [51.9607, 7.6261]
         const warningsToAdd = []
         if(warnings !== undefined && Object.keys(warnings).length !== 0){
-            warnings.warnings.map((warning) => {
+            warnings.warnings.forEach((warning) => {
                 const area = convertPolygons(warning.regions[0].polygon)
                 if(pointInPolygon(msCoords, area)) {
                     warningsToAdd.push(warning)

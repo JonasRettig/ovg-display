@@ -181,15 +181,18 @@ export default function Home() {
           setWarnings(warnings)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch, rssEnabled, newsEnabled, weatherEnabled, demoMode]);
 
   // if the news are fetched we build new news cards
   useEffect(() => {
     buildNewsCards()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news]);
 
   useEffect(() => {
     determineLayout()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news, breakingNews, weather, warnings, dates, refetch, weatherWarningsExist]);
 
   // the use effect that automatically switches the news card every 15 seconds
@@ -289,7 +292,7 @@ async function buildNewsCards() {
   var newsCardsToAdd = []
   // only build the cards if there are news
   if(news.news) {
-      news.news.map((report) => {
+      news.news.forEach((report) => {
         // we map through all news, if they arent a video story or breaking news the image, title and a short text are added to the cards array 
         if(report.content){
           if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") { 
@@ -347,14 +350,14 @@ function createRows(result) {
   var rows = []
   var id = 0
   // every row gets a unique id
-  result.rss.channel[0].item.map((row) => {
+  result.rss.channel[0].item.forEach((row) => {
     row["id"] = id
     id++
   })
   rows = result.rss.channel[0].item
   var finalRows = []
   // the rows are built from split rows from the rss call
-  rows.map((row) => { 
+  rows.forEach((row) => { 
     var newRow = {}
     const titleParts = row.title[0].split(":");
     const descriptionParts = row.description[0].split("<br />");

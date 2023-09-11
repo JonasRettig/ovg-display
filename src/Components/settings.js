@@ -1,7 +1,7 @@
 // a component that defines a small settings window for the site
 // not really needed for the final production, built this so i can easily showcase light and dark theme
 // and to disable the fetches for the weather and the news so I don't get rate limited while developing
-import {React, useEffect, useState} from 'react';
+import {React, useState} from 'react';
 import { 
     Dialog, 
     DialogContent, 

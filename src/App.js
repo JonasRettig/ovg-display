@@ -28,7 +28,7 @@ export default function Home() {
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
   const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely,alerts&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
-  const warningsURL = "https://s3.eu-central-1.amazonaws.com/app-prod-static.warnwetter.de/v16/warnings_nowcast.json"
+  const warningsURL = "https://s3.eu-central-1.amazonaws.com/app-prod-static.warnwetter.de/v16/gemeinde_warnings_v2.json"
   // the cors proxy url that is needed to fetch the rss feed
   // the proxy is deployed on cloudflare with this script https://github.com/Zibri/cloudflare-cors-anywhere
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';

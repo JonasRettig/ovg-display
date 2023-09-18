@@ -57,7 +57,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
 
     // const that maps the correct icons for the weather
     const iconMap = {
-        //"01d": <WiDaySunny size={iconSize} />,
+        "01d": <WiDaySunny size={iconSize} />,
         "01n": <WiNightClear size={iconSize} />,
         "02d": <WiDayCloudy size={iconSize} />,
         "02n": <WiNightAltCloudy size={iconSize} />,

@@ -33,7 +33,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
     const [relevantWarnings, setRelevantWarnings] = useState([]);
 
     //Size of all weather Icons
-    const iconSize = 266;
+    const iconSize = 80;
 
     // use effect that builds the forecast if the weather state changes
     useEffect(() => {
@@ -55,54 +55,48 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [relevantWarnings]);
 
+    // const that maps the correct icons for the weather
+    const iconMap = {
+        "01d": <WiDaySunny size={iconSize} />,
+        "01n": <WiNightClear size={iconSize} />,
+        "02d": <WiDayCloudy size={iconSize} />,
+        "02n": <WiNightAltCloudy size={iconSize} />,
+        "03d": <WiCloud size={iconSize} />,
+        "03n": <WiCloud size={iconSize} />,
+        "04d": <WiCloudy size={iconSize} />,
+        "04n": <WiCloudy size={iconSize} />,
+        "09d": <WiRain size={iconSize} />,
+        "09n": <WiRain size={iconSize} />,
+        "10d": <WiDayRain size={iconSize} />,
+        "10n": <WiNightAltRain size={iconSize} />,
+        "11d": <WiThunderstorm size={iconSize} />,
+        "11n": <WiThunderstorm size={iconSize} />,
+        "13d": <WiSnow size={iconSize} />,
+        "13n": <WiSnow size={iconSize} />,
+        "50d": <WiDayFog size={iconSize} />,
+        "50n": <WiNightFog size={iconSize} />,
+    };
+
     // function that returns the correct icon for the weather
-    // ! I feel like this is a really bad way to do this but I dont really know how I could do it better
-    // ! NOT ALL CASES ARE COVERED
+    // returns error icons if no icon is mapped
     function returnIcon(iconID) {
-        if(iconID === "01d") {
-            return <WiDaySunny size={iconSize}/>
-        } else if(iconID === "01n") {
-            return <WiNightClear size={iconSize}/>
-        } else if(iconID === "02d") {
-            return <WiDayCloudy size={iconSize}/>
-        } else if(iconID === "02n") {
-            return <WiNightAltCloudy size={iconSize}/>
-        } else if(iconID === "03d" || iconID === "03n") {
-            return <WiCloud size={iconSize}/>
-        } else if(iconID === "04d" || iconID === "04n") {
-            return <WiCloudy size={iconSize}/>
-        } else if (iconID === "09d" || iconID === "09n") {
-            return <WiRain size={iconSize}/>
-        } else if (iconID === "10d") {
-            return <WiDayRain size={iconSize}/>
-        } else if (iconID === "10n") {
-            return <WiNightAltRain size={iconSize}/>
-        } else if (iconID === "11d" || iconID === "11n") {
-            return <WiThunderstorm size={iconSize}/>
-        } else if (iconID === "13d" || iconID === "13n") {
-            return <WiSnow size={iconSize}/>
-        } else if (iconID === "50d") {
-            return <WiDayFog size={iconSize}/>
-        } else if (iconID === "50n") {
-            return <WiNightFog size={iconSize}/>
-        } else {
-            return <ErrorOutlineIcon sx={{fontSize: "266px"}} />
-        }
+        return iconMap[iconID] || <ErrorOutlineIcon sx={{ fontSize: iconSize, color: "red" }} />;
     }
 
     // function that matches the warning level to a color
     // the color is take from the dwd website
     function matchWarningColor(level) {
-        if(level === 1) {
-            return "#ffeb3b"
-        } else if(level === 2) {
-            return "#fb8c00"
-        } else if(level === 3) {
-            return "#e53935"
-        } else if(level === 4) {
-            return "#880e4f"
-        } else {
-            return "#red"
+        switch(level) {
+            case 1:
+                return "#ffeb3b"
+            case 2:
+                return "#fb8c00"
+            case 3:
+                return "#e53935"
+            case 4:
+                return "#880e4f"
+            default:
+                return "#red"
         }
     }
 
@@ -116,10 +110,10 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
-                        <Typography variant="h2"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
+                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >
+                        <Typography variant="h4"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
                             {returnIcon(item.weather[0].icon)}  
-                            <Typography variant="h2"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
+                            <Typography variant="h4"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
                     )
                 }
@@ -176,10 +170,10 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         {weather.current ?
         <Stack direction="column" spacing={2}>
         <Stack direction={"row"} justifyContent={"space-evenly"} spacing={5}>
-            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width="600px">
-                <Typography variant="h2"> Aktuell  </Typography>
+            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                <Typography variant="h4"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
-                <Typography variant="h2"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
+                <Typography variant="h4"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
             </Stack>
             {forecastRender.map((item) => {
                 return item;
@@ -192,8 +186,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
                     <Card>
                     <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
                     <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography variant="h1"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
-                        <Typography variant="h2"> {item.description} </Typography>
+                        <Typography variant="h4"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
+                        <Typography variant="h5"> {item.description} </Typography>
                     </Stack>
                     </CardContent>
                     </Card>
@@ -202,7 +196,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         </Stack>}
         </Stack>
         :
-        <Typography variant="h1"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
+        <Typography variant="h3"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
         }
         </Stack>
         </ThemeProvider>

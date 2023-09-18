@@ -28,7 +28,7 @@ export default function Home() {
   const tagesschauAPI = "https://www.tagesschau.de/api2/homepage/"
   const rssURL = "https://www.ovg.nrw.de/behoerde/sitzungstermine/sitzungstermine_rss.php"
   const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=51.959775&lon=7.624631&exclude=daily,minutely,alerts&lang=de&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`;
-  const warningsURL = "https://s3.eu-central-1.amazonaws.com/app-prod-static.warnwetter.de/v16/warnings_nowcast.json"
+  const warningsURL = "https://s3.eu-central-1.amazonaws.com/app-prod-static.warnwetter.de/v16/gemeinde_warnings_v2.json"
   // the cors proxy url that is needed to fetch the rss feed
   // the proxy is deployed on cloudflare with this script https://github.com/Zibri/cloudflare-cors-anywhere
   const proxyUrl = 'https://cors.jonas-1.workers.dev/?';
@@ -154,7 +154,7 @@ export default function Home() {
           },
         ]
       }
-      setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
+      setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
       setNewsCards([{
           image: ["https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBxrfI/16x9-1920.jpg", "https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBx1ms/1x1-840.jpg"],
           title: "Dies ist eine Demo Nachricht",
@@ -255,35 +255,35 @@ function determineLayout() {
   //if there are both weather warnings and breaking news
   if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([1600, 1100])
-    setNewsImageSize([1, 450])
-    setPageSplit([53, 43])
+    setNewsSize([800, 450])
+    setNewsImageSize([1, 225])
+    setPageSplit([52, 40])
     setNewsDirection("row")
     setImageInCardDirection("column")
   } 
   //if there are only weather warnings
   else if(weatherWarningsExist) {
-    setDatesSize(1000)
-    setNewsSize([2500, 1])
-    setNewsImageSize([1, 600])
-    setPageSplit([53, 43])    
+    setDatesSize(300)
+    setNewsSize([1200, 1])
+    setNewsImageSize([1, 250])
+    setPageSplit([52, 40])    
     setImageInCardDirection("column")
   }
   //if there are only breaking news
   else if(breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([2600, 2600])
-    setNewsImageSize([500, 1000])
-    setPageSplit([63, 33])
+    setNewsSize([1200, 1200])
+    setNewsImageSize([400, 400])
+    setPageSplit([62, 30])
     setNewsDirection("column")
     setImageInCardDirection("row")
   }
   //if nothing special happens
   else {
-    setDatesSize(1000)
-    setNewsSize([2500, 1])
-    setNewsImageSize([1, 800])
-    setPageSplit([63, 33])
+    setDatesSize(300)
+    setNewsSize([750, 1])
+    setNewsImageSize([1, 240])
+    setPageSplit([62, 30])
     setImageInCardDirection("column")
   }
 }
@@ -348,9 +348,11 @@ function rssFetcher() {
 // function that creates the rows for the data grid
 // for the data from the rss feed
 function createRows(result) {
+  if(!result.rss.channel[0].item) return
   var rows = []
   var id = 0
   // every row gets a unique id
+  console.log(result)
   result.rss.channel[0].item.forEach((row) => {
     row["id"] = id
     id++
@@ -410,29 +412,82 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography paddingLeft={"20px"} variant="h1"> Termine </Typography>
+          <Typography paddingLeft={"20px"} variant="h4"> Termine </Typography>
             {(dates.length > 0) ?
-            dates.map((row) => {
-              return (
-                <Card key={row.id} sx={{width:datesSize}}>
-                  <CardContent>
-                    <Typography gutterBottom variant="h2" component="div">
-                      {row.title}
-                    </Typography>
-                    <Typography variant="h3" color="text.secondary">
-                      {row.case}
-                    </Typography>
-                    <Typography variant="h3" color="text.secondary">
-                      {row.type}, {row.procedure}
-                    </Typography>
-                    <Typography variant="h3" color="red">
-                      {row.info}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              )})   
+              dates.length <= 3 ?
+                dates.map((row) => {
+                  return (
+                    <Card key={row.id} sx={{width:datesSize}}>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {row.title}
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary">
+                          {row.case}
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary">
+                          {row.type}, {row.procedure}
+                        </Typography>
+                        <Typography variant="h6" color="red">
+                          {row.info}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+              )}) : 
+              dates.map((row, index) => {
+                if(index % 2 === 0) {
+                  if(dates[index + 1]) {
+                    return(
+                      <Stack direction={"row"} spacing={1}>
+                        <Card key={row.id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {row.title} {row.case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {row.type}, {row.procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {row.info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                        <Card key={dates[index + 1].id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {dates[index + 1].title}  {dates[index + 1].case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {dates[index + 1].type}, {dates[index + 1].procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {dates[index + 1].info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Stack>
+                    )
+                  }
+                  else {
+                    return(
+                        <Card key={row.id} sx={{width:datesSize}}>
+                          <CardContent>
+                            <Typography gutterBottom variant="h6" component="div">
+                              {row.title} {row.case}
+                            </Typography>
+                            <Typography variant="subtitle1" color="text.secondary">
+                              {row.type}, {row.procedure}
+                            </Typography>
+                            <Typography variant="subtitle1" color="red">
+                              {row.info}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      )
+                    }
+              }}) 
             :
-            <Typography paddingLeft={"20px"} variant="h1"> Heute finden keine Termine statt. </Typography>
+            <Typography paddingLeft={"20px"} variant="h3"> Heute finden keine Termine statt. </Typography>
             }
           </>
           }
@@ -445,10 +500,10 @@ return (
           {breakingNews.title &&
               <Card style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
               <CardContent>
-                <Typography gutterBottom variant="h1" component="div">
+                <Typography gutterBottom variant="h4" component="div">
                   EIL +++ {breakingNews.title}
                 </Typography>
-                <Typography variant="h2" color="text.secondary">
+                <Typography variant="h5" color="text.secondary">
                   {breakingNews.description}
                 </Typography>
               </CardContent>
@@ -469,10 +524,10 @@ return (
                 }}             
               />
               <CardContent>
-                <Typography gutterBottom variant="h1" component="div">
+                <Typography gutterBottom variant="h4" component="div">
                   {newsCards[index].title}
                 </Typography>
-                <Typography variant="h2" color="text.secondary">
+                <Typography variant="h5" color="text.secondary">
                   {newsCards[index].text}
                 </Typography>
               </CardContent>

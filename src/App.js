@@ -42,9 +42,9 @@ export default function Home() {
   const [dates, setDates] = useState({})
   // these states are necessary for the site to work properly
   const [index, setIndex] = useState(0)
-  const [rssEnabled, setRssEnabled] = useState(false)
-  const [newsEnabled, setNewsEnabled] = useState(false)
-  const [weatherEnabled, setWeatherEnabled] = useState(false)
+  const [rssEnabled, setRssEnabled] = useState(true)
+  const [newsEnabled, setNewsEnabled] = useState(true)
+  const [weatherEnabled, setWeatherEnabled] = useState(true)
   const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   const [demoMode, setDemoMode] = useState("off")

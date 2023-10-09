@@ -310,6 +310,7 @@ async function buildNewsCards() {
         }
       })
     setNewsCards(newsCardsToAdd)
+    preloadImages(newsCardsToAdd)
   }
   // if there are no news we build a single card that informs useres that the fetch failed
   else {
@@ -319,6 +320,15 @@ async function buildNewsCards() {
           text: "Sollte das Problem bestehen bleiben wenden Sie sich bitte an den Administrator."
     }])
   }
+}
+
+function preloadImages(cards) {
+  cards.map((card) => {
+    const img169 = new Image();
+    img169.src = card.image[0];
+    const img11 = new Image();
+    img11.src = card.image[1];
+  })
 }
 
 // breaking news are built as their own card

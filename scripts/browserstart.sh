@@ -1,5 +1,7 @@
 #!/usr/bin/bash
-echo ---  browserstart ---
-chromium-browser &
-sleep 2
-xdotool key F11
+echo ------------------------------------------------------------------
+date
+PATH=/home/adm-lokal/.config/nvm/versions/node/v20.7.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
+export DISPLAY=:0
+export XAUTHORITY=/home/adm-lokal/.Xauthority
+chromium-browser --kiosk

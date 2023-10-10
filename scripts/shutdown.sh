@@ -1,7 +1,3 @@
 #!/usr/bin/bash
-xdotool search --class "terminal" | while read id
-do
-      xdotool windowactivate "$id" &>/dev/null
-      xdotool key ctrl+shift+q
-      sleep 0.2
-done 
+kill $(ps aux | grep serve | awk '{print $2}')
+kill $(ps aux | grep chromium | awk '{print $2}')

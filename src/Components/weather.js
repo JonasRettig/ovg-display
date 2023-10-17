@@ -110,13 +110,13 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     var minUntil = (item.dt - Date.now()/1000)/60
-                    console.log(minUntil)
+                    var timeUntil = 0
                     var timeString = "Stunden"
                     if (minUntil <= 60) {
                         timeString = "Minuten"
-                        var timeUntil = Math.round(minUntil)
+                        timeUntil = Math.round(minUntil)
                     } else {
-                        var timeUntil = Math.round(minUntil)/60
+                        timeUntil = Math.round(minUntil)/60
                     }
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >

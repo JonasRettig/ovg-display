@@ -112,5 +112,6 @@ useEffect(() => {
             setBreakingNews(breakingNews)
             setWarnings(warnings)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }}, [demoMode])
 }

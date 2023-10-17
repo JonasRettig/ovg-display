@@ -369,7 +369,7 @@ return (
                 if(index % 2 === 0) {
                   if(dates[index + 1]) {
                     return(
-                      <Stack direction={"row"} spacing={1}>
+                      <Stack key={row.id} direction={"row"} spacing={1}>
                         <Card key={row.id} sx={{width:datesSize}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
@@ -431,7 +431,7 @@ return (
           spacing={2}
         >
           {breakingNews.title &&
-              <Card style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
+              <Card key="breakingNews" style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
                   EIL +++ {breakingNews.title}
@@ -444,6 +444,7 @@ return (
           }
           {newsCards[index] &&
           <Card
+            key={index}
             sx={{width:newsSize[0], height:newsSize[1]}}
           >
             <Stack direction={imageInCardDirection}>

@@ -20,15 +20,16 @@ export default function DemoMode({
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
         }
 
-    const time = Date.now() / 1000
+    const time = Date.now()/1000
 
     const warnings = {
     "time": time,
     "warnings": [
         {
         "level": 3,
-        "start": time,
-        "end": time + 3600,
+        "warnId" : 123456789,
+        "start": time * 1000,
+        "end": (time + 3600) * 1000,
         "regions": [
             {
             "polygon": [
@@ -50,8 +51,9 @@ export default function DemoMode({
         },
         {
         "level": 4,
-        "start": time - 3600,
-        "end": time + 6000,
+        "warnId" : 234567891,
+        "start": (time - 3600) * 1000,
+        "end": (time + 6000) * 1000,
         "regions": [
             {
             "polygon": [
@@ -85,7 +87,12 @@ useEffect(() => {
         setRssEnabled(false)
         setNewsEnabled(false)
         setWeatherEnabled(false)
-        setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
+        setDates([
+            {id: 1, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 2, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, 
+            {id: 3, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 4, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 6, title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
         setNewsCards([{
             image: ["https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBxrfI/16x9-1920.jpg", "https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBx1ms/1x1-840.jpg"],
             title: "Dies ist eine Demo Nachricht",

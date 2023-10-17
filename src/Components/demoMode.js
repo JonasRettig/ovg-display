@@ -87,7 +87,12 @@ useEffect(() => {
         setRssEnabled(false)
         setNewsEnabled(false)
         setWeatherEnabled(false)
-        setDates([{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, {title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},{title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
+        setDates([
+            {id: 1, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 2, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"}, 
+            {id: 3, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 4, title: "Demo Termin", case: "Demo Fall", type: "Demo Typ", procedure : "Demo Procedure"},
+            {id: 6, title: "Demo Termin 2", case: "Demo Fall 2", type: "Demo Typ 2", procedure : "Demo Procedure", info:"abgesagt"}])
         setNewsCards([{
             image: ["https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBxrfI/16x9-1920.jpg", "https://images.tagesschau.de/image/3f9e6293-0260-4ee2-958f-7f3163bf808b/AAABioLa2pA/AAABibBx1ms/1x1-840.jpg"],
             title: "Dies ist eine Demo Nachricht",

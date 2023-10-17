@@ -48,6 +48,7 @@ export default function Home() {
   const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   const [demoMode, setDemoMode] = useState("off")
+  const [lastAPICall, setLastAPICall] = useState(0)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
   const [currentThemeName, setCurrentThemeName] = useState("dark")
@@ -59,14 +60,12 @@ export default function Home() {
   const [pageSplit, setPageSplit] = useState([63, 33])
   const [newsDirection, setNewsDirection] = useState("column")
 
+
   // Reload the page every 30 minutes
   // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
     setBreakingNews({})
-    setNews({})
-    setWeather({})
     setWarnings({})
-    setDates({})
     setRefetch(!refetch)
   }, 30 * 60 * 1000);
 
@@ -85,6 +84,9 @@ export default function Home() {
   // it pulls all the data from the APIs if the fetches are enabled
   // the news cards are always built as they create a needed fallback display if no news can be fetched
   useEffect(() => {
+    //cancels the fetch if the last fetch was less than 20 minutes ago
+    if(Date.now() - lastAPICall < 1200 * 1000) return
+    setLastAPICall(Date.now())
     buildNewsCards()
     if(rssEnabled) {
       rssFetcher()
@@ -395,6 +397,7 @@ return (
     setDemoMode={setDemoMode}
     setRefetch={setRefetch}
     refetch={refetch}
+    setLastAPICall={setLastAPICall}
   />
   <Box
     height = {pageSplit[0] + "vh"}

@@ -38,7 +38,8 @@ export default function Settings({
     demoMode,
     setDemoMode,
     setRefetch, 
-    refetch
+    refetch,
+    setLastAPICall,
 }) {
     
     // state that defines if the window is open or not
@@ -132,7 +133,7 @@ export default function Settings({
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
                         <Typography variant="h5" marginRight={"20px"}> Den Seiteninhalt <b>neuladen</b> </Typography>
-                        <IconButton onMouseDown={() => {setRefetch(!refetch); setBreakingNews([]); setNews([]); setDates({}); setWeather({}); setDemoMode("off")}}>
+                        <IconButton onMouseDown={() => {setLastAPICall(0); setRefetch(!refetch); setBreakingNews([]); setNews([]); setDates({}); setWeather({}); setDemoMode("off")}}>
                             <CachedIcon sx={{fontSize: iconSize}}/>
                         </IconButton>
                     </Stack>

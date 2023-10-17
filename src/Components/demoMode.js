@@ -20,7 +20,7 @@ export default function DemoMode({
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
         }
 
-    const time = Date.now() / 1000
+    const time = Date.now()/1000
 
     const warnings = {
     "time": time,
@@ -97,7 +97,7 @@ useEffect(() => {
         "hourly":[
             {"dt":time, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
             {"dt":time +  1968, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
-            {"dt":time + 3600 * 2,"temp":24, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"04d"}]},
+            {"dt":(time + 3600 * 2),"temp":24, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"04d"}]},
             {"dt":time + 3600 * 3,"temp":25, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"09d"}]},
             {"dt":time + 3600 * 4,"temp":26, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"11d"}]},
             {"dt":time + 3600 * 5,"temp":27, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"13d"}]},

@@ -109,18 +109,9 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
-                    var minUntil = (item.dt - Date.now()/1000)/60
-                    var timeUntil = 0
-                    var timeString = "Stunden"
-                    if (minUntil <= 60) {
-                        timeString = "Minuten"
-                        timeUntil = Math.round(minUntil)
-                    } else {
-                        timeUntil = Math.round(minUntil)/60
-                    }
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >
-                        <Typography variant="h4"> in {timeUntil} {timeString} </Typography>
+                        <Typography variant="h4"> um {buildTimestamp(item.dt * 1000, false)} </Typography>
                             {returnIcon(item.weather[0].icon)}  
                             <Typography variant="h4"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>
@@ -131,18 +122,23 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         }
     }
 
-    const buildTimestamp = (timestamp) => {
+    const buildTimestamp = (timestamp, full) => {
         // Create a new JavaScript Date object based on the timestamp
         const date = new Date(timestamp);
       
         // Get the date and time components from the date object
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-      
-        // Format the date and time components as a string
-        const formattedTime = `${day}.${month} ${hours}:${minutes} Uhr`;
+
+        var formattedTime = `${hours}:${minutes} Uhr`;
+
+        if(full){
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const year = date.getFullYear();
+            // Format the date and time components as a string
+            formattedTime = `${day}.${month}.${year} ${hours}:${minutes} Uhr`;
+        }
       
         return formattedTime;
       };
@@ -193,12 +189,12 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             {relevantWarnings.map((item) => {
                 return (
                     <Card>
-                    <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
-                    <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
-                        <Typography variant="h4"> {item.event} von {buildTimestamp(item.start)} bis {buildTimestamp(item.end)} </Typography>
-                        <Typography variant="h5"> {item.description} </Typography>
-                    </Stack>
-                    </CardContent>
+                        <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
+                            <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                                <Typography variant="h4"> {item.event} von {buildTimestamp(item.start, true)} bis {buildTimestamp(item.end, true)} </Typography>
+                                <Typography variant="h5"> {item.description} </Typography>
+                            </Stack>
+                        </CardContent>
                     </Card>
                 )
             })}

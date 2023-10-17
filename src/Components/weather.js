@@ -185,12 +185,12 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             })}
         </Stack>
         {relevantWarnings &&
-        <Stack direction={"row"} spacing={1} justifyContent={"center"}>
+        <Stack key="warningsStack" direction={"row"} spacing={1} justifyContent={"center"}>
             {relevantWarnings.map((item) => {
                 return (
-                    <Card>
-                        <CardContent style={{ backgroundColor: matchWarningColor(item.level) }}>
-                            <Stack key={item.warnID} justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
+                    <Card key={item.warnId}>
+                        <CardContent key={item.warnId} style={{ backgroundColor: matchWarningColor(item.level) }}>
+                            <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                                 <Typography variant="h4"> {item.event} von {buildTimestamp(item.start, true)} bis {buildTimestamp(item.end, true)} </Typography>
                                 <Typography variant="h5"> {item.description} </Typography>
                             </Stack>

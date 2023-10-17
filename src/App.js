@@ -369,7 +369,7 @@ return (
                 if(index % 2 === 0) {
                   if(dates[index + 1]) {
                     return(
-                      <Stack direction={"row"} spacing={1}>
+                      <Stack key={row.id} direction={"row"} spacing={1}>
                         <Card key={row.id} sx={{width:datesSize}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">

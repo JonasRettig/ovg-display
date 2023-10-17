@@ -27,8 +27,9 @@ export default function DemoMode({
     "warnings": [
         {
         "level": 3,
-        "start": time,
-        "end": time + 3600,
+        "warnId" : 123456789,
+        "start": time * 1000,
+        "end": (time + 3600) * 1000,
         "regions": [
             {
             "polygon": [
@@ -50,8 +51,9 @@ export default function DemoMode({
         },
         {
         "level": 4,
-        "start": time - 3600,
-        "end": time + 6000,
+        "warnId" : 234567891,
+        "start": (time - 3600) * 1000,
+        "end": (time + 6000) * 1000,
         "regions": [
             {
             "polygon": [
@@ -97,7 +99,7 @@ useEffect(() => {
         "hourly":[
             {"dt":time, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
             {"dt":time +  1968, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
-            {"dt":(time + 3600 * 2),"temp":24, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"04d"}]},
+            {"dt":time + 3600 * 2,"temp":24, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"04d"}]},
             {"dt":time + 3600 * 3,"temp":25, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"09d"}]},
             {"dt":time + 3600 * 4,"temp":26, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"11d"}]},
             {"dt":time + 3600 * 5,"temp":27, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"13d"}]},

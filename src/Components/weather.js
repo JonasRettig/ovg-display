@@ -109,9 +109,18 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             const forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6);
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
+                    var minUntil = (item.dt - Date.now()/1000)/60
+                    console.log(minUntil)
+                    var timeString = "Stunden"
+                    if (minUntil <= 60) {
+                        timeString = "Minuten"
+                        var timeUntil = Math.round(minUntil)
+                    } else {
+                        var timeUntil = Math.round(minUntil)/60
+                    }
                     forecastBuilder.push(
                     <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >
-                        <Typography variant="h4"> in {Math.round((item.dt - Date.now()/1000)/60/60)} Stunden </Typography>
+                        <Typography variant="h4"> in {timeUntil} {timeString} </Typography>
                             {returnIcon(item.weather[0].icon)}  
                             <Typography variant="h4"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
                     </Stack>

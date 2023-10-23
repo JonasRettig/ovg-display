@@ -218,7 +218,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         </Stack>}
         </Stack>
         :
-        <Typography variant="h3"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen bleiben wenden Sie sich bitte an den Administrator. </Typography>
+        <Typography variant="h3"> Das Wetter konnte nicht abgerufen werden. Sollte dieses Problem bestehen, wenden Sie sich bitte an den Administrator. </Typography>
         }
         </Stack>
         </ThemeProvider>

@@ -195,6 +195,15 @@ function determineLayout() {
     setNewsDirection("column")
     setImageInCardDirection("row")
   }
+  //if there are no court dates
+  else if(Object.keys(dates).length === 0){
+    setDatesSize(1)
+    setNewsSize([1200, 1200])
+    setNewsImageSize([400, 400])
+    setPageSplit([55, 42])
+    setNewsDirection("column")
+    setImageInCardDirection("row")
+  }
   //if nothing special happens
   else {
     setDatesSize(300)
@@ -264,11 +273,11 @@ function rssFetcher() {
 // function that creates the rows for the data grid
 // for the data from the rss feed
 function createRows(result) {
+  console.log(dates)
   if(!result.rss.channel[0].item) return
   var rows = []
   var id = 0
   // every row gets a unique id
-  console.log(result)
   result.rss.channel[0].item.forEach((row) => {
     row["id"] = id
     id++
@@ -343,12 +352,12 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography paddingLeft={"20px"} variant="h4"> Termine </Typography>
+          <Typography sx={{textAlign:"center"}} paddingLeft={"20px"} variant="h4"> Termine </Typography>
             {(dates.length > 0) ?
               dates.length <= 3 ?
                 dates.map((row) => {
                   return (
-                    <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
+                    <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                           {row.title}
@@ -370,7 +379,7 @@ return (
                   if(dates[index + 1]) {
                     return(
                       <Stack key={row.id} direction={"row"} spacing={1}>
-                        <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
+                        <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {row.title} {row.case}
@@ -383,7 +392,7 @@ return (
                             </Typography>
                           </CardContent>
                         </Card>
-                        <Card elevation="0" key={dates[index + 1].id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
+                        <Card elevation={0} key={dates[index + 1].id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {dates[index + 1].title}  {dates[index + 1].case}
@@ -401,7 +410,7 @@ return (
                   }
                   else {
                     return(
-                        <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover, textAlign:"center"}}>
+                        <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover, textAlign:"center"}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {row.title} {row.case}
@@ -431,7 +440,7 @@ return (
           spacing={2}
         >
           {breakingNews.title &&
-              <Card elevation="0" key="breakingNews" style={{ backgroundColor: '#e53935' }} sx={{width:newsSize[1]}}>
+              <Card elevation={0} key="breakingNews" style={{ backgroundColor: '#e53935' }} sx={{width:newsSize[1]}}>
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
                   EIL +++ {breakingNews.title}
@@ -446,7 +455,7 @@ return (
           <Card
             key={index}
             sx={{width:newsSize[0], height:newsSize[1]}}
-            elevation="0"
+            elevation={0}
           >
             <Stack direction={imageInCardDirection}>
               <CardMedia

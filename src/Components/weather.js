@@ -96,7 +96,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             case 4:
                 return "#880e4f"
             default:
-                return "#880e4f"
+                return "#e53935"
         }
     }
 
@@ -127,15 +127,32 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         const date = new Date(timestamp);
       
         // Get the date and time components from the date object
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+
+        if (minutes.toString().length === 1) {
+            minutes = "0" + minutes;
+        }
+
+        if (hours.toString().length === 1) {
+            hours = "0" + hours;
+        }
 
         var formattedTime = `${hours}:${minutes} Uhr`;
 
         if(full){
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
+            var month = date.getMonth() + 1
+            var day = date.getDate();
             const year = date.getFullYear();
+
+            if (month.toString().length === 1) {
+                month = "0" + month;
+            }
+
+            if (day.toString().length === 1) {
+                day = "0" + day;
+            }
+
             // Format the date and time components as a string
             formattedTime = `${day}.${month}.${year} ${hours}:${minutes} Uhr`;
         }

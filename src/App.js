@@ -341,6 +341,7 @@ return (
     sx={{overflow: "hidden"}}
   >
     <Stack
+      height={"100%"}
       marginTop="50px"
       direction="row"
       justifyContent="space-evenly"

@@ -348,7 +348,7 @@ return (
               dates.length <= 3 ?
                 dates.map((row) => {
                   return (
-                    <Card key={row.id} sx={{width:datesSize}}>
+                    <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
                           {row.title}
@@ -370,7 +370,7 @@ return (
                   if(dates[index + 1]) {
                     return(
                       <Stack key={row.id} direction={"row"} spacing={1}>
-                        <Card key={row.id} sx={{width:datesSize}}>
+                        <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {row.title} {row.case}
@@ -383,7 +383,7 @@ return (
                             </Typography>
                           </CardContent>
                         </Card>
-                        <Card key={dates[index + 1].id} sx={{width:datesSize}}>
+                        <Card elevation="0" key={dates[index + 1].id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {dates[index + 1].title}  {dates[index + 1].case}
@@ -401,7 +401,7 @@ return (
                   }
                   else {
                     return(
-                        <Card key={row.id} sx={{width:datesSize}}>
+                        <Card elevation="0" key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover, textAlign:"center"}}>
                           <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
                               {row.title} {row.case}
@@ -431,7 +431,7 @@ return (
           spacing={2}
         >
           {breakingNews.title &&
-              <Card key="breakingNews" style={{ backgroundColor: 'red' }} sx={{width:newsSize[1]}}>
+              <Card elevation="0" key="breakingNews" style={{ backgroundColor: '#e53935' }} sx={{width:newsSize[1]}}>
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
                   EIL +++ {breakingNews.title}
@@ -446,6 +446,7 @@ return (
           <Card
             key={index}
             sx={{width:newsSize[0], height:newsSize[1]}}
+            elevation="0"
           >
             <Stack direction={imageInCardDirection}>
               <CardMedia

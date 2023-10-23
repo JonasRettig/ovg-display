@@ -96,7 +96,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             case 4:
                 return "#880e4f"
             default:
-                return "#red"
+                return "#880e4f"
         }
     }
 
@@ -188,7 +188,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
         <Stack key="warningsStack" direction={"row"} spacing={1} justifyContent={"center"}>
             {relevantWarnings.map((item) => {
                 return (
-                    <Card key={item.warnId}>
+                    <Card key={item.warnId}  elevation="0">
                         <CardContent key={item.warnId} style={{ backgroundColor: matchWarningColor(item.level) }}>
                             <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                                 <Typography variant="h4"> {item.event} von {buildTimestamp(item.start, true)} bis {buildTimestamp(item.end, true)} </Typography>

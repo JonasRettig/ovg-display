@@ -89,6 +89,7 @@ export default function Home() {
     if(Date.now() - lastAPICall < 1200 * 1000) return
     setLastAPICall(Date.now())
     buildNewsCards()
+    hideMouseAfterInactivity()
     if(rssEnabled) {
       rssFetcher()
     }
@@ -213,6 +214,18 @@ function determineLayout() {
     setPageSplit([62, 30])
     setImageInCardDirection("column")
   }
+}
+
+//function that hides the mouse after a timeout of 5 seconds
+function hideMouseAfterInactivity() {
+  let timeoutId;
+  document.addEventListener("mousemove", () => {
+    clearTimeout(timeoutId);
+    document.body.style.cursor = "default";
+    timeoutId = setTimeout(() => {
+      document.body.style.cursor = "none";
+    }, 5000);
+  });
 }
 
 // the function that builds the news cards

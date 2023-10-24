@@ -103,11 +103,13 @@ useEffect(() => {
             {"dt":time,"temp":22,"weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"01d"}]},
         "hourly":[
             {"dt":time, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
-            {"dt":time +  1968, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
+            {"dt":time +  1759, "temp":23, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"03d"}]},
             {"dt":time + 3600 * 2,"temp":24, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"04d"}]},
             {"dt":time + 3600 * 3,"temp":25, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"09d"}]},
             {"dt":time + 3600 * 4,"temp":26, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"11d"}]},
             {"dt":time + 3600 * 5,"temp":27, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"13d"}]},
+            {"dt":time + 3600 * 6,"temp":27, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"13d"}]},
+            {"dt":time + 3600 * 7,"temp":27, "weather":[{"id":800,"main":"Clear","description":"Klarer Himmel","icon":"13d"}]},
         ]})
         if(demoMode === "breakingNews") {
             setBreakingNews(breakingNews)

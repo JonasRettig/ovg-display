@@ -107,8 +107,8 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
             var forecastBuilder = [];
             // gets the next 5h by slicing an array sorted by the time stamp
             var forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(1, 6)
-            // if the next forecast is less than 30 minutes away
-            if(forecastTimes[0] - Date.now() / 1000 <= 1800){
+            // if the next forecast is less than 15 minutes away we skip it
+            if(forecastTimes[0] - Date.now() / 1000 <= 900){
                 forecastTimes = forecast.map((item) => {return item.dt}).sort().slice(2, 7);
             }
             forecast.forEach((item) => {

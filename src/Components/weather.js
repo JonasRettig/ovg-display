@@ -25,7 +25,7 @@ import {
 } from "weather-icons-react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Weather({weather, warnings, setWeatherWarningsExist, theme}) {
+export default function Weather({weather, warnings, setWeatherWarningsExist, buildTimestamp, theme}) {
     // the state that contains the forecast if it exists
     // chose a really bad name for this I guess
     const [forecastRender, setForecastRender] = useState([]);
@@ -121,44 +121,6 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, the
             })
         }
     }
-
-    const buildTimestamp = (timestamp, full) => {
-        // Create a new JavaScript Date object based on the timestamp
-        const date = new Date(timestamp);
-      
-        // Get the date and time components from the date object
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-
-        if (minutes.toString().length === 1) {
-            minutes = "0" + minutes;
-        }
-
-        if (hours.toString().length === 1) {
-            hours = "0" + hours;
-        }
-
-        var formattedTime = `${hours}:${minutes} Uhr`;
-
-        if(full){
-            var month = date.getMonth() + 1
-            var day = date.getDate();
-            const year = date.getFullYear();
-
-            if (month.toString().length === 1) {
-                month = "0" + month;
-            }
-
-            if (day.toString().length === 1) {
-                day = "0" + day;
-            }
-
-            // Format the date and time components as a string
-            formattedTime = `${day}.${month}.${year} ${hours}:${minutes} Uhr`;
-        }
-      
-        return formattedTime;
-      };
 
     // function that parses the warnings and checks if they are relevant
     // the check is done with polygon coordinates

@@ -40,6 +40,7 @@ export default function Settings({
     setRefetch, 
     refetch,
     setLastAPICall,
+    lastRefetchString,
 }) {
     
     // state that defines if the window is open or not
@@ -88,6 +89,8 @@ export default function Settings({
             <DialogTitle variant='h3' alignSelf={"center"}>Settings</DialogTitle>
             <DialogContent>
                 <Stack direction={"column"}>
+
+                    <Typography variant="h5" textAlign={'center'}> Die letzte Aktualisierung war am <b>{lastRefetchString}</b> </Typography>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
                         <Typography variant="h5" marginRight={"20px"}> Das aktuelle Theme ist <b>{currentThemeName}</b> </Typography>

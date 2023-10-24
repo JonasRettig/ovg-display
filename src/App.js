@@ -146,6 +146,7 @@ async function fetchWeather() {
         setWeather(result)
       },
       (error) => {
+        if(error)
         console.log(error);
       }
     );
@@ -227,7 +228,7 @@ async function buildNewsCards() {
             // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
             image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
             title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
-            text: Object.values(report.content)[0].value.replace(/<\/?strong>/g, '')
+            text: Object.values(report.content)[0].value.replace(/<[^>]*>/g, '')
           }
           )} else if (report.breakingNews) {
             // breaking news are handled in another function
@@ -300,6 +301,44 @@ function createRows(result) {
   setDates(finalRows)
 }
 
+const buildTimestamp = (timestamp, full) => {
+  // Create a new JavaScript Date object based on the timestamp
+  const date = new Date(timestamp);
+
+  // Get the date and time components from the date object
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+
+  if (minutes.toString().length === 1) {
+      minutes = "0" + minutes;
+  }
+
+  if (hours.toString().length === 1) {
+      hours = "0" + hours;
+  }
+
+  var formattedTime = `${hours}:${minutes} Uhr`;
+
+  if(full){
+      var month = date.getMonth() + 1
+      var day = date.getDate();
+      const year = date.getFullYear();
+
+      if (month.toString().length === 1) {
+          month = "0" + month;
+      }
+
+      if (day.toString().length === 1) {
+          day = "0" + day;
+      }
+
+      // Format the date and time components as a string
+      formattedTime = `${day}.${month}.${year} ${hours}:${minutes} Uhr`;
+  }
+
+  return formattedTime;
+};
+
 return (
   <ThemeProvider theme={currentTheme}>
   <CssBaseline />
@@ -321,6 +360,7 @@ return (
     setRefetch={setRefetch}
     refetch={refetch}
     setLastAPICall={setLastAPICall}
+    lastRefetchString={buildTimestamp(lastAPICall, true)}
   />
   <DemoMode
     demoMode={demoMode}
@@ -490,7 +530,7 @@ return (
           alignContent="center"
           alignItems="center"
         >
-          <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} theme={currentTheme}/>
+          <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} buildTimestamp={buildTimestamp} theme={currentTheme}/>
         </Box>
   </ThemeProvider>
 )

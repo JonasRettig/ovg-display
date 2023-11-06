@@ -68,7 +68,7 @@ export default function Home() {
     setBreakingNews({})
     setWarnings({})
     setRefetch(!refetch)
-  }, 30 * 60 * 1000);
+  }, 15 * 60 * 1000);
 
   // function that changes the theme name from light to dark and also changes the theme itself
   function handleCurrentThemeChange() {
@@ -85,8 +85,8 @@ export default function Home() {
   // it pulls all the data from the APIs if the fetches are enabled
   // the news cards are always built as they create a needed fallback display if no news can be fetched
   useEffect(() => {
-    //cancels the fetch if the last fetch was less than 20 minutes ago
-    if(Date.now() - lastAPICall < 1200 * 1000) return
+    //cancels the fetch if the last fetch was less than 12 minutes ago
+    if(Date.now() - lastAPICall < 720 * 1000) return
     setLastAPICall(Date.now())
     buildNewsCards()
     hideMouseAfterInactivity()

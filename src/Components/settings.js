@@ -86,72 +86,72 @@ export default function Settings({
             fullWidth={true}
             maxWidth={"md"}
         >
-            <DialogTitle variant='h3' alignSelf={"center"}>Settings</DialogTitle>
+            <DialogTitle variant='h1' alignSelf={"center"}>Settings</DialogTitle>
             <DialogContent>
                 <Stack direction={"column"}>
 
-                    <Typography variant="h5" textAlign={'center'}> Die letzte Aktualisierung war am <b>{lastRefetchString}</b> </Typography>
+                    <Typography variant="h3" textAlign={'center'}> Die letzte Aktualisierung war am <b>{lastRefetchString}</b> </Typography>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Das aktuelle Theme ist <b>{currentThemeName}</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Das aktuelle Theme ist <b>{currentThemeName}</b> </Typography>
                         <IconButton onMouseDown={() => handleCurrentThemeChange()}>
                             {currentThemeName === 'dark' ? <Brightness7Icon sx={{fontSize: iconSize}}/> : <Brightness4Icon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Alle Elemente <b>aktivieren</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Alle Elemente <b>aktivieren</b> </Typography>
                         <IconButton onMouseDown={() => {setNewsEnabled(true); setRssEnabled(true); setWeatherEnabled(true); setDemoMode("off")}}>
                             <AirplanemodeActiveIcon sx={{fontSize: iconSize}}/>
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Der RSS-Feed ist <b>{rssEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Der RSS-Feed ist <b>{rssEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
                         <IconButton onMouseDown={() => {setRssEnabled(!rssEnabled); setDemoMode("off")}}>
                             {!rssEnabled ? <AirplanemodeInactiveIcon sx={{fontSize: iconSize}}/> : <AirplanemodeActiveIcon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Die Nachrichten sind <b>{newsEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Die Nachrichten sind <b>{newsEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
                         <IconButton onMouseDown={() => {setNewsEnabled(!newsEnabled); setDemoMode("off")}}>
                             {!newsEnabled ? <AirplanemodeInactiveIcon sx={{fontSize: iconSize}}/> : <AirplanemodeActiveIcon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Das Wetter ist <b>{weatherEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Das Wetter ist <b>{weatherEnabled ? "aktiviert" : "deaktiviert"}</b> </Typography>
                         <IconButton onMouseDown={() => {setWeatherEnabled(!weatherEnabled) ; setDemoMode("off")}}>
                             {!weatherEnabled ? <AirplanemodeInactiveIcon sx={{fontSize: iconSize}}/> : <AirplanemodeActiveIcon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Die Button ist <b>{(startOpacity === 0) ? "unsichtbar" : "sichtbar"}</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Die Button ist <b>{(startOpacity === 0) ? "unsichtbar" : "sichtbar"}</b> </Typography>
                         <IconButton onMouseDown={() => setStartOpacity((startOpacity === 0) ? 1 : 0)}>
                             {(startOpacity === 0) ? <VisibilityOffIcon sx={{fontSize: iconSize}}/> : <VisibilityIcon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Den Seiteninhalt <b>neuladen</b> </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Den Seiteninhalt <b>neuladen</b> </Typography>
                         <IconButton onMouseDown={() => {setLastAPICall(0); setRefetch(!refetch); setBreakingNews([]); setNews([]); setDates({}); setWeather({}); setDemoMode("off")}}>
                             <CachedIcon sx={{fontSize: iconSize}}/>
                         </IconButton>
                     </Stack>
 
                     <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
-                        <Typography variant="h5" marginRight={"20px"}> Der Demo-Modus ist gerade </Typography>
+                        <Typography variant="h3" marginRight={"20px"}> Der Demo-Modus ist gerade </Typography>
                         <FormControl sx={{ minWidth: 300}}>
                             <Select
                             value={demoMode}
                             onChange={(e) => {handleDemoChange(e.target.value)}}
                             >
-                                <MenuItem value={"off"}> <Typography variant="h5"> <b>deaktiviert</b> </Typography></MenuItem>
-                                <MenuItem value={"breakingNews"}><Typography variant="h5"> <b>Breaking News</b> </Typography></MenuItem>
-                                <MenuItem value={"weatherWarnings"}><Typography variant="h5"> <b>Wetter Warnings</b> </Typography></MenuItem>
-                                <MenuItem value={"chaos"}><Typography variant="h5"> <b>Chaos</b> </Typography></MenuItem>
+                                <MenuItem value={"off"}> <Typography variant="h3"> <b>deaktiviert</b> </Typography></MenuItem>
+                                <MenuItem value={"breakingNews"}><Typography variant="h3"> <b>Breaking News</b> </Typography></MenuItem>
+                                <MenuItem value={"weatherWarnings"}><Typography variant="h3"> <b>Wetter Warnings</b> </Typography></MenuItem>
+                                <MenuItem value={"chaos"}><Typography variant="h3"> <b>Chaos</b> </Typography></MenuItem>
                             </Select>
                         </FormControl>
                     </Stack>

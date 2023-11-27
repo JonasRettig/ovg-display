@@ -114,7 +114,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
             forecast.forEach((item) => {
                 if (forecastTimes.includes(item.dt)) {
                     forecastBuilder.push(
-                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} >
+                    <Stack key={item.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width={"16vw"}>
                         <Typography variant="h2"> um {buildTimestamp(item.dt * 1000, false)} </Typography>
                             {returnIcon(item.weather[0].icon)}  
                             <Typography variant="h2"> {item.weather[0].description} bei {Math.round(item.temp)}°C </Typography>
@@ -156,9 +156,9 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
         <ThemeProvider theme={theme}>
         <Stack direction="column" margin={3}>
         {weather.current ?
-        <Stack direction="column" spacing={2}>
-        <Stack direction={"row"} justifyContent={"space-evenly"} spacing={5}>
-            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1}>
+        <Stack direction="column" spacing={10}>
+        <Stack direction={"row"} justifyContent={"space-evenly"} spacing={2}>
+            <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width={"16vw"}>
                 <Typography variant="h2"> Aktuell  </Typography>
                 {returnIcon(weather.current.weather[0].icon)}  
                 <Typography variant="h2"> {weather.current.weather[0].description} bei {Math.round(weather.current.temp)}°C</Typography>
@@ -168,11 +168,11 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
             })}
         </Stack>
         {relevantWarnings &&
-        <Stack key="warningsStack" direction={"row"} spacing={1} justifyContent={"center"}>
+        <Stack key="warningsStack" direction={"row"} spacing={2} justifyContent={"center"}>
             {relevantWarnings.map((item) => {
                 return (
-                    <Card key={item.warnId}  elevation={0}>
-                        <CardContent key={item.warnId} style={{ backgroundColor: matchWarningColor(item.level) }}>
+                    <Card key={item.warnId}  elevation={0} sx={{width:"40vw", textAlign: "center"}}>
+                        <CardContent key={item.warnId} style={{ backgroundColor: matchWarningColor(item.level)}}>
                             <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                                 <Typography variant="h2"> {item.event} von {buildTimestamp(item.start, true)} bis {buildTimestamp(item.end, true)} </Typography>
                                 <Typography variant="h3"> {item.description} </Typography>

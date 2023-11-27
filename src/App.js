@@ -209,8 +209,8 @@ function determineLayout() {
   //if nothing special happens
   else {
     setDatesSize(1000)
-    setNewsSize([750, 1])
-    setNewsImageSize([1, 240])
+    setNewsSize([2500, 1])
+    setNewsImageSize([1, 800])
     setPageSplit([62, 30])
     setImageInCardDirection("column")
   }

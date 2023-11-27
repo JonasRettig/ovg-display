@@ -48,7 +48,7 @@ export default function Settings({
     const [startOpacity, setStartOpacity] = useState(0)
 
     // size of the icons in the settings window
-    const iconSize = 40;
+    const iconSize = 80;
 
     // function that handles the demo mode change
     // if the demo mode is switched off all the mock data is cleared
@@ -78,13 +78,13 @@ export default function Settings({
         }}
         onMouseDown={() => setShowSettings(!showSettings)}
         >
-        <SettingsIcon sx={{fontSize: 50}} />
+        <SettingsIcon sx={{fontSize: 160}} />
         </IconButton>
         <Dialog
             open={showSettings} 
             onClose={() => setShowSettings(false)}
             fullWidth={true}
-            maxWidth={"md"}
+            maxWidth={"lg"}
         >
             <DialogTitle variant='h1' alignSelf={"center"}>Settings</DialogTitle>
             <DialogContent>

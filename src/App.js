@@ -174,25 +174,25 @@ function determineLayout() {
   //if there are both weather warnings and breaking news
   if(weatherWarningsExist && breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([800, 450])
-    setNewsImageSize([1, 225])
+    setNewsSize([1600, 1100])
+    setNewsImageSize([1, 450])
     setPageSplit([52, 40])
     setNewsDirection("row")
     setImageInCardDirection("column")
   } 
   //if there are only weather warnings
   else if(weatherWarningsExist) {
-    setDatesSize(300)
-    setNewsSize([1200, 1])
-    setNewsImageSize([1, 250])
+    setDatesSize(1)
+    setNewsSize([2500, 1])
+    setNewsImageSize([1, 750])
     setPageSplit([52, 40])    
     setImageInCardDirection("column")
   }
   //if there are only breaking news
   else if(breakingNews.description) {
     setDatesSize(1)
-    setNewsSize([1200, 1200])
-    setNewsImageSize([400, 400])
+    setNewsSize([2600, 2600])
+    setNewsImageSize([500, 1000])
     setPageSplit([62, 30])
     setNewsDirection("column")
     setImageInCardDirection("row")
@@ -200,17 +200,17 @@ function determineLayout() {
   //if there are no court dates
   else if(Object.keys(dates).length === 0){
     setDatesSize(1)
-    setNewsSize([1200, 1200])
-    setNewsImageSize([400, 400])
+    setNewsSize([2600, 2600])
+    setNewsImageSize([500, 1000])
     setPageSplit([55, 42])
     setNewsDirection("column")
     setImageInCardDirection("row")
   }
   //if nothing special happens
   else {
-    setDatesSize(300)
-    setNewsSize([750, 1])
-    setNewsImageSize([1, 240])
+    setDatesSize(1000)
+    setNewsSize([2500, 1])
+    setNewsImageSize([1, 800])
     setPageSplit([62, 30])
     setImageInCardDirection("column")
   }
@@ -406,23 +406,23 @@ return (
         >
           {(dates !== null && dates !== undefined) &&
           <>
-          <Typography sx={{textAlign:"center"}} paddingLeft={"20px"} variant="h4"> Termine </Typography>
+          <Typography sx={{textAlign:"center"}} paddingLeft={"20px"} variant="h2"> Termine </Typography>
             {(dates.length > 0) ?
               dates.length <= 3 ?
                 dates.map((row) => {
                   return (
                     <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h3" component="div">
                           {row.title}
                         </Typography>
-                        <Typography variant="h6" color="text.secondary">
+                        <Typography variant="h4" color="text.secondary">
                           {row.case}
                         </Typography>
-                        <Typography variant="h6" color="text.secondary">
+                        <Typography variant="h4" color="text.secondary">
                           {row.type}, {row.procedure}
                         </Typography>
-                        <Typography variant="h6" color="red">
+                        <Typography variant="h4" color="red">
                           {row.info}
                         </Typography>
                       </CardContent>
@@ -435,26 +435,32 @@ return (
                       <Stack key={row.id} direction={"row"} spacing={1}>
                         <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                              {row.title} {row.case}
+                            <Typography gutterBottom variant="h3" component="div">
+                              {row.title}
                             </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
+                            <Typography variant="h4" color="text.secondary">
+                              {row.case}
+                            </Typography>
+                            <Typography variant="h4" color="text.secondary">
                               {row.type}, {row.procedure}
                             </Typography>
-                            <Typography variant="subtitle1" color="red">
+                            <Typography variant="h4" color="red">
                               {row.info}
                             </Typography>
                           </CardContent>
                         </Card>
                         <Card elevation={0} key={dates[index + 1].id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover}}>
                           <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                              {dates[index + 1].title}  {dates[index + 1].case}
+                            <Typography gutterBottom variant="h3" component="div">
+                              {dates[index + 1].title}
                             </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
+                            <Typography variant="h4" color="text.secondary">
+                              {dates[index + 1].case}
+                            </Typography>
+                            <Typography variant="h4" color="text.secondary">
                               {dates[index + 1].type}, {dates[index + 1].procedure}
                             </Typography>
-                            <Typography variant="subtitle1" color="red">
+                            <Typography variant="h4" color="red">
                               {dates[index + 1].info}
                             </Typography>
                           </CardContent>
@@ -464,15 +470,18 @@ return (
                   }
                   else {
                     return(
-                        <Card elevation={0} key={row.id} sx={{width:datesSize, border:2, borderColor:currentTheme.palette.action.hover, textAlign:"center"}}>
+                        <Card elevation={0} key={row.id} sx={{width:datesSize/2, border:2, borderColor:currentTheme.palette.action.hover, textAlign:"center"}}>
                           <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                              {row.title} {row.case}
+                            <Typography gutterBottom variant="h3" component="div">
+                              {row.title}
                             </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
+                            <Typography variant="h4" color="text.secondary">
+                              {row.case}
+                            </Typography>
+                            <Typography variant="h4" color="text.secondary">
                               {row.type}, {row.procedure}
                             </Typography>
-                            <Typography variant="subtitle1" color="red">
+                            <Typography variant="h4" color="red">
                               {row.info}
                             </Typography>
                           </CardContent>
@@ -483,7 +492,7 @@ return (
               return null
             }) 
             :
-            <Typography paddingLeft={"20px"} variant="h3"> Heute finden keine Termine statt. </Typography>
+            <Typography paddingLeft={"20px"} variant="h1"> Heute finden keine Termine statt. </Typography>
             }
           </>
           }
@@ -492,14 +501,15 @@ return (
         <Stack 
           direction={newsDirection}
           spacing={2}
+          alignItems={"center"}
         >
           {breakingNews.title &&
-              <Card elevation={0} key="breakingNews" style={{ backgroundColor: '#e53935' }} sx={{width:newsSize[1]}}>
+              <Card elevation={0} key="breakingNews" style={{ backgroundColor: '#e53935' }} sx={{width:newsSize[1], height: newsDirection === "row" ? "fit-content" : "55%"}}>
               <CardContent>
-                <Typography gutterBottom variant="h4" component="div">
+                <Typography gutterBottom variant="h2" component="div">
                   EIL +++ {breakingNews.title}
                 </Typography>
-                <Typography variant="h5" color="text.secondary">
+                <Typography variant="h3" color="text.secondary">
                   {breakingNews.description}
                 </Typography>
               </CardContent>
@@ -522,10 +532,10 @@ return (
                 }}             
               />
               <CardContent>
-                <Typography gutterBottom variant="h4" component="div">
+                <Typography gutterBottom variant="h2" component="div">
                   {newsCards[index].title}
                 </Typography>
-                <Typography variant="h5" color="text.secondary">
+                <Typography variant="h3" color="text.secondary">
                   {newsCards[index].text}
                 </Typography>
               </CardContent>

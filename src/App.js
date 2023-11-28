@@ -18,6 +18,7 @@ import Weather from "./Components/weather";
 import Settings from "./Components/settings";
 import NRWDivider from "./Components/nrwDivider";
 import DemoMode from "./Components/demoMode";
+import shadows from "@mui/material/styles/shadows";
 
 <html>
 <p>print env secret to HTML</p>
@@ -49,6 +50,7 @@ export default function Home() {
   const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   const [demoMode, setDemoMode] = useState("off")
+  const [showTimer, setShowTimer] = useState(true)
   const [lastAPICall, setLastAPICall] = useState(0)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
@@ -370,6 +372,8 @@ return (
     setDates={setDates}
     demoMode={demoMode}
     setDemoMode={setDemoMode}
+    setShowTimer={setShowTimer}
+    showTimer={showTimer}
     setRefetch={setRefetch}
     refetch={refetch}
     setLastAPICall={setLastAPICall}
@@ -555,6 +559,9 @@ return (
         >
           <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} buildTimestamp={buildTimestamp} theme={currentTheme}/>
         </Box>
+        {showTimer && 
+          <Typography sx={{position:"fixed"}}>{(Date.now() - lastAPICall)/1000/60}</Typography>
+        }
   </ThemeProvider>
 )
 }

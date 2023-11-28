@@ -21,6 +21,8 @@ import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CachedIcon from '@mui/icons-material/Cached';
+import TimerOffIcon from '@mui/icons-material/TimerOff';
+import TimerIcon from '@mui/icons-material/TimerOff';
 
 export default function Settings({
     currentThemeName, 
@@ -37,6 +39,8 @@ export default function Settings({
     setWeather,
     demoMode,
     setDemoMode,
+    showTimer,
+    setShowTimer,
     setRefetch, 
     refetch,
     setLastAPICall,
@@ -131,6 +135,13 @@ export default function Settings({
                         <Typography variant="h3" marginRight={"20px"}> Die Button ist <b>{(startOpacity === 0) ? "unsichtbar" : "sichtbar"}</b> </Typography>
                         <IconButton onMouseDown={() => setStartOpacity((startOpacity === 0) ? 1 : 0)}>
                             {(startOpacity === 0) ? <VisibilityOffIcon sx={{fontSize: iconSize}}/> : <VisibilityIcon sx={{fontSize: iconSize}}/>}
+                        </IconButton>
+                    </Stack>
+
+                    <Stack direction={"row"} justifyContent={"center"} justifyItems={"center"} alignItems={"center"}>
+                        <Typography variant="h3" marginRight={"20px"}> Die Timer ist <b>{(showTimer === false) ? "unsichtbar" : "sichtbar"}</b> </Typography>
+                        <IconButton onMouseDown={() => setShowTimer(!showTimer)}>
+                            {(showTimer === false) ? <TimerOffIcon sx={{fontSize: iconSize}}/> : <TimerIcon sx={{fontSize: iconSize}}/>}
                         </IconButton>
                     </Stack>
 

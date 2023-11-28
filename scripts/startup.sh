@@ -11,5 +11,5 @@ if git fetch && [ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]; then
 else
 	echo "Up to Date"
 fi 
-serve -s build
-bash /home/adm-lokal/ovg-display/ovg-display/scripts/browserstart.sh >> /home/adm-lokal/ovg-display/browserdeploy.log 2>&1
+serve -s build &
+sleep 15 && bash /home/adm-lokal/ovg-display/ovg-display/scripts/browserstart.sh >> /home/adm-lokal/ovg-display/browserdeploy.log 2>&1

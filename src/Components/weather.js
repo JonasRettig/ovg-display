@@ -162,9 +162,9 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
 
     return (
         <ThemeProvider theme={theme}>
-        <Stack direction="column" margin={3}>
+        <Stack direction="column" margin={3} paddingTop={5}>
         {weather.current ?
-        <Stack direction="column" spacing={10}>
+        <Stack direction="column" spacing={5}>
         <Stack direction={"row"} justifyContent={"space-evenly"} spacing={2}>
             <Stack key={weather.current.dt} justifyContent={"flex-start"} alignContent={"center"} alignItems={"center"} spacing={1} width={"16vw"}>
                 <Typography variant="h2"> Aktuell  </Typography>

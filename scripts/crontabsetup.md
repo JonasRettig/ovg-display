@@ -2,8 +2,6 @@ Add this to crontab on the host:
 ```
 #at reboot a current version of the site is built from the repo and served
 @reboot sleep 60 && bash /home/adm-lokal/ovg-display/ovg-display/scripts/startup.sh >> /home/adm-lokal/ovg-display/deploy.log 2>&1
-#the default chromium browser is opened in fullscreen on reboot
-@reboot sleep 60 && bash /home/adm-lokal/ovg-display/ovg-display/scripts/browserstart.sh >> /home/adm-lokal/ovg-display/browserdeploy.log 2>&1
 @reboot bash /home/adm-lokal/ovg-display/ovg-display/scripts/disabledevices.sh >> /home/adm-lokal/ovg-display/disabledevices.log 2>&1
 #every day during the week at 9pm the server and browser are shut down
 0 21 * * 1,2,3,4,5 bash /home/adm-lokal/ovg-display/ovg-display/scripts/shutdown.sh >> /home/adm-lokal/ovg-display/shutdown.log 2>&1

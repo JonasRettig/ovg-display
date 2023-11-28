@@ -67,7 +67,6 @@ export default function Home() {
   // all relevant states are reset and the refetch is triggered by inverting the refresh variable
   setInterval(function() {
     setBreakingNews({})
-    setWarnings({})
     setRefetch(!refetch)
   }, 15 * 60 * 1000);
 
@@ -113,7 +112,7 @@ export default function Home() {
   useEffect(() => {
     determineLayout()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [news, breakingNews, weather, warnings, dates, refetch, weatherWarningsExist]);
+  }, [news, breakingNews, weather, warnings, dates, weatherWarningsExist]);
 
   // the use effect that automatically switches the news card every 15 seconds
   // it is dependent on the news cards length so that it does not switch to a card that doesnt exist

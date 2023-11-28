@@ -492,7 +492,7 @@ return (
               return null
             }) 
             :
-            <Typography paddingLeft={"20px"} variant="h1"> Heute finden keine Termine statt. </Typography>
+            <Typography paddingLeft={"20px"} variant="h1" width="20vw"> Heute finden keine Termine statt. </Typography>
             }
           </>
           }

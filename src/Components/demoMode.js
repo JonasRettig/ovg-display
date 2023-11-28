@@ -73,6 +73,54 @@ export default function DemoMode({
         "description": "Dies ist eine Demo Warnung",
         "event": "Demo Warnung",
         },
+        {
+            "level": 4,
+            "warnId" : 234567891,
+            "start": (time - 3600) * 1000,
+            "end": (time + 6000) * 1000,
+            "regions": [
+                {
+                "polygon": [
+                    52,
+                    8,
+                    52,
+                    6,
+                    51,
+                    8,
+                    51,
+                    6,
+                    51.9607, 
+                    7.6261
+                ]
+                }
+            ],
+            "description": "Dies ist eine Demo Warnung",
+            "event": "Demo Warnung",
+            },
+            {
+                "level": 4,
+                "warnId" : 234567891,
+                "start": (time - 3600) * 1000,
+                "end": (time + 6000) * 1000,
+                "regions": [
+                    {
+                    "polygon": [
+                        52,
+                        8,
+                        52,
+                        6,
+                        51,
+                        8,
+                        51,
+                        6,
+                        51.9607, 
+                        7.6261
+                    ]
+                    }
+                ],
+                "description": "Dies ist eine Demo Warnung",
+                "event": "Demo Warnung",
+                },
     ]
     }
 

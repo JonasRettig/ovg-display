@@ -49,6 +49,7 @@ export default function Home() {
   const [weatherWarningsExist, setWeatherWarningsExist] = useState(false)
   const [refetch, setRefetch] = useState(false)
   const [demoMode, setDemoMode] = useState("off")
+  const [showTimer, setShowTimer] = useState(false)
   const [lastAPICall, setLastAPICall] = useState(0)
   // and these allow the site to have a dark and light mode switch
   const [currentTheme, setCurrentTheme] = useState(createThemeWithMode("dark"))
@@ -236,14 +237,23 @@ async function buildNewsCards() {
       news.news.forEach((report) => {
         // we map through all news, if they arent a video story or breaking news the image, title and a short text are added to the cards array 
         if(report.content){
-          if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") { 
-          newsCardsToAdd.push({
-            // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
-            image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
-            title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
-            text: Object.values(report.content)[0].value.replace(/<[^>]*>/g, '')
-          }
-          )} else if (report.breakingNews) {
+          if (!report.breakingNews && report.sophoraId !== "wettervorhersage-deutschland-100") {
+            if(report.content.length > 0 && report.teaserImage && report.title) {
+              newsCardsToAdd.push({
+                // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
+                image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
+                title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
+                text: Object.values(report.content)[0].value.replace(/<[^>]*>/g, '')
+              })
+            } else if (report.firstSentence && report.teaserImage && report.title) {
+                newsCardsToAdd.push({
+                  // this is the highest 16x9 resolution that tagesschau offers, another possibility would be ["1x1-840"]
+                  image: [report.teaserImage.imageVariants["16x9-1920"], report.teaserImage.imageVariants["1x1-840"]],
+                  title: report.title.replace(/^(\s*\+\+)/, '').replace(/(\+\+\s*)$/, ''),
+                  text: report.firstSentence
+                })
+            }
+          } else if (report.breakingNews) {
             // breaking news are handled in another function
             handleBreakingNews(report)
           }
@@ -370,6 +380,8 @@ return (
     setDates={setDates}
     demoMode={demoMode}
     setDemoMode={setDemoMode}
+    setShowTimer={setShowTimer}
+    showTimer={showTimer}
     setRefetch={setRefetch}
     refetch={refetch}
     setLastAPICall={setLastAPICall}
@@ -555,6 +567,9 @@ return (
         >
           <Weather weather={weather} warnings={warnings} setWeatherWarningsExist={setWeatherWarningsExist} buildTimestamp={buildTimestamp} theme={currentTheme}/>
         </Box>
+        {showTimer && 
+          <Typography sx={{position:"fixed"}}>{(Date.now() - lastAPICall)/1000/60}</Typography>
+        }
   </ThemeProvider>
 )
 }

@@ -138,8 +138,16 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
                 if(pointInPolygon(msCoords, area)) {
                     warningsToAdd.push(warning)
                 }
-        }
+            }
         )}
+        // all warnings are sorted by level, then start date and end date
+        // if there are 4 or more warnings we cap them at 3
+        warningsToAdd.sort(warningsToAdd.end)
+        warningsToAdd.sort(warningsToAdd.start)
+        warningsToAdd.sort(warningsToAdd.level)
+        if(warningsToAdd.length > 3) {
+            warningsToAdd.slice(1,3)
+        }
         setRelevantWarnings(warningsToAdd)
     }
 
@@ -171,7 +179,7 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
         <Stack key="warningsStack" direction={"row"} spacing={2} justifyContent={"center"}>
             {relevantWarnings.map((item) => {
                 return (
-                    <Card key={item.warnId}  elevation={0} sx={{width:"40vw", textAlign: "center"}}>
+                    <Card key={item.warnId}  elevation={0} sx={{textAlign: "center"}}>
                         <CardContent key={item.warnId} style={{ backgroundColor: matchWarningColor(item.level)}}>
                             <Stack justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={1}>
                                 <Typography variant="h2"> {item.event} von {buildTimestamp(item.start, true)} bis {buildTimestamp(item.end, true)} </Typography>

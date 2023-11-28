@@ -22,7 +22,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CachedIcon from '@mui/icons-material/Cached';
 import TimerOffIcon from '@mui/icons-material/TimerOff';
-import TimerIcon from '@mui/icons-material/TimerOff';
+import TimerIcon from '@mui/icons-material/Timer';
 
 export default function Settings({
     currentThemeName, 

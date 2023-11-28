@@ -12,3 +12,4 @@ else
 	echo "Up to Date"
 fi 
 serve -s build
+bash /home/adm-lokal/ovg-display/ovg-display/scripts/browserstart.sh >> /home/adm-lokal/ovg-display/browserdeploy.log 2>&1

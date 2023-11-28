@@ -42,7 +42,11 @@ export default function Weather({weather, warnings, setWeatherWarningsExist, bui
     }, [weather])
 
     useEffect(() => {
-        parseWarnings(warnings)
+        if(Object.values(warnings)) {
+            parseWarnings(warnings)
+        } else {
+            setWeatherWarningsExist(false)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [warnings])
 
